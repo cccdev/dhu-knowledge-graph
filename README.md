@@ -16,7 +16,7 @@ G6： 图形引擎
 
 ## 初始化项目
 
-环境配置：Node Git npm pnpm
+机器环境预装配置：Node Git Npm
 
 下载pnpm
 ```zsh
@@ -44,7 +44,7 @@ pnpm run dev
 
 下载本仓库，在doc/week-1目录下建立文件夹，命名为＂xv6-xxx＂
 
-在文件夹下上传xmind文件和word文件
+在文件夹下上传思维导图文件和word文件
 
 注意文件命名规范为：＂学号+姓名+角度＂
 
