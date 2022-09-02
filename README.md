@@ -13,6 +13,7 @@ Vite：构建工具
 
 G6： 图形引擎
 
+
 ## 初始化项目
 
 环境配置：Node Git npm pnpm
@@ -38,7 +39,7 @@ pnpm i
 pnpm run dev
 ```
 
-## How to use
+## 作业提交
 第一周🐳
 
 下载本仓库，在doc/week-1目录下建立文件夹，命名为＂xv6-xxx＂
