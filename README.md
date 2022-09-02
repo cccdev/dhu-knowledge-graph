@@ -19,7 +19,8 @@ G6： 图形引擎
 
 下载pnpm
 ```zsh
-npm i pnpm -
+npm i pnpm -g
+// Mac环境
 pnpm setup && source .zshrc
 ```
 
