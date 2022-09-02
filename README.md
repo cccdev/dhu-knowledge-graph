@@ -29,3 +29,31 @@ DHU计科专业实习小组公共仓库
 2. 修改记录清晰，不用保存多余重复文件。
 
 3. 日后汇总信息有迹可循。
+
+## 初始化项目
+
+环境配置：Node Git npm pnpm
+
+\
+下载pnpm
+```zsh
+npm i pnpm -
+pnpm setup && source .zshrc
+```
+
+配置pnpm镜像源
+```shell
+pnpm config set registry https://registry.npmmirror.com/
+```
+
+安装项目依赖
+```shell
+pnpm i
+```
+
+启动项目
+```shell
+pnpm run dev
+```
+
+
