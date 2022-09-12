@@ -43,7 +43,7 @@ pnpm run dev
 ## 作业提交
 第一周🐳
 
-下载本仓库，在doc/week-1目录下建立文件夹，命名为＂xv6-xxx＂
+下载本仓库，在doc/week-1_2目录下建立文件夹，命名为＂xv6-xxx＂
 
 在文件夹下上传思维导图文件和word文件
 
@@ -58,6 +58,9 @@ pnpm run dev
 调试：xv6-debug
 
 系统启动：xv6-start
+
+第二周🐳
+在doc/week-1_2目录下，更新自己的思维导图或word
 
 
 ## Why
