@@ -70,17 +70,14 @@ pnpm run dev
 
 本周主要是开发小组相关工具学习
 
----
-
 技术栈
 
-每个人都要会 Git 操作！
+PS：每个人都要会 Git 操作！
 
 前端：React + TypeScript + Vite
 
 后端：Springboot + MySQL + Java
 
----
 
 人员分工（暂定）
 
