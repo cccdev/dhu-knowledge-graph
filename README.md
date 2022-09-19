@@ -10,7 +10,7 @@ TypeScript：开发语言
 
 Vite：构建工具
 
-G6： 图形引擎
+ECharts： 可视化图表库
 
 
 ## 初始化项目
