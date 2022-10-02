@@ -1,14 +1,13 @@
 /* body{
     background-color: aliceblue;
 } */
-.registerOuter{
+.registerOuter {
     height: 300px;
     width: 400px;
     margin: 150px auto;
     padding: 60px;
-    border: 1px solid rgba(0, 0, 0, .1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     background-color: white;
-    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
-
