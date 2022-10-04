@@ -1,6 +1,7 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input } from 'antd'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import './index.css'
 
 const LoginForm: React.FC = () => {
@@ -68,7 +69,13 @@ const LoginForm: React.FC = () => {
                 >
                     登录
                 </Button>
-                &nbsp; <a href="javascript:;">立即注册</a>
+                &nbsp;
+                <NavLink
+                    to="/register"
+                    className={({ isActive }) => (isActive ? 'current' : '')}
+                >
+                    立即注册
+                </NavLink>
             </Form.Item>
         </Form>
     )

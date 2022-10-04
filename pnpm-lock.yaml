@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@ant-design/icons': ^4.7.0
   '@types/node': ^18.7.18
   '@types/react': ^18.0.20
   '@types/react-dom': ^18.0.6
@@ -17,16 +18,19 @@ specifiers:
   prettier: 2.7.1
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-router-dom: ^6.4.1
   ts-node: ^10.9.1
   typescript: ^4.8.3
   vite: ^3.1.3
 
 dependencies:
+  '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
   antd: 4.23.4_biqbaboplfbrettd7655fr4n2y
   echarts: 5.3.3
   echarts-for-react: 3.0.2_echarts@5.3.3+react@18.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-router-dom: 6.4.1_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
   '@types/node': 18.7.18
@@ -497,6 +501,11 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
     dev: true
+
+  /@remix-run/router/1.0.1:
+    resolution: {integrity: sha512-eBV5rvW4dRFOU1eajN7FmYxjAIVz/mRHgUE9En9mBn6m3mulK3WTR5C3iQhL9MZ14rWAq+xOlEaCkDiW0/heOg==}
+    engines: {node: '>=14'}
+    dev: false
 
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -2906,6 +2915,29 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /react-router-dom/6.4.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-MY7NJCrGNVJtGp8ODMOBHu20UaIkmwD2V3YsAOUQoCXFk7Ppdwf55RdcGyrSj+ycSL9Uiwrb3gTLYSnzcRoXww==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.0.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.4.1_react@18.2.0
+    dev: false
+
+  /react-router/6.4.1_react@18.2.0:
+    resolution: {integrity: sha512-OJASKp5AykDWFewgWUim1vlLr7yfD4vO/h+bSgcP/ix8Md+LMHuAjovA74MQfsfhQJGGN1nHRhwS5qQQbbBt3A==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.0.1
+      react: 18.2.0
+    dev: false
 
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}

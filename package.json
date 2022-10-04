@@ -11,11 +11,13 @@
         "lint": "prettier --write . && eslint"
     },
     "dependencies": {
+        "@ant-design/icons": "^4.7.0",
         "antd": "^4.23.3",
         "echarts": "^5.3.3",
         "echarts-for-react": "^3.0.2",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.4.1"
     },
     "devDependencies": {
         "@types/node": "^18.7.18",
