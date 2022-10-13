@@ -46,10 +46,10 @@ const ZustandExample: React.FC<ZustandExampleProps> = (props) => {
     const fetch = useStore((state) => state.fetch)
     return (
         <div className="App">
-            <h1>{getVotes} people have cast their votes</h1>
+            <h1>共有{getVotes}人投票</h1>
             <Button onClick={addVotes}>增加票数</Button>
             <Button onClick={subtractVotes}>减少票数</Button>
-            <h1>共有{votes.length}人投票 </h1>
+            <h1>总票数为：{votes.length}张 </h1>
             <Button
                 onClick={() => {
                     fetch(voting)
