@@ -4,9 +4,11 @@
  * 详细参考：
  * https://blog.openreplay.com/zustand-simple-modern-state-management-for-react
  */
+import { ExampleContext } from '@/context/example'
 import { Button } from 'antd'
 import React from 'react'
 import create from 'zustand'
+import { Child } from './child'
 
 // 定义state类型
 interface ZustandState {
@@ -45,7 +47,7 @@ const ZustandExample: React.FC<ZustandExampleProps> = (props) => {
     const votes = useStore((state) => state.Votes)
     const fetch = useStore((state) => state.fetch)
     return (
-        <div className="App">
+        <ExampleContext.Provider value="我想提供的一些context">
             <h1>共有{getVotes}人投票</h1>
             <Button onClick={addVotes}>增加票数</Button>
             <Button onClick={subtractVotes}>减少票数</Button>
@@ -57,7 +59,8 @@ const ZustandExample: React.FC<ZustandExampleProps> = (props) => {
             >
                 获取票数
             </Button>
-        </div>
+            <Child />
+        </ExampleContext.Provider>
     )
 }
 

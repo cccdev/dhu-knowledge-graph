@@ -1,7 +1,11 @@
-/* eslint-disable react/react-in-jsx-scope */
-import ZustandExample from './components/Example'
+/**
+ * @author 陆劲涛
+ * @description App
+ */
+import React from 'react'
+import ZustandExample from './components/Example/zustand'
 
-function App() {
+const App: React.FC = (props) => {
     return (
         <div className="App">
             {/* <KnowledgeGraph></KnowledgeGraph> */}
