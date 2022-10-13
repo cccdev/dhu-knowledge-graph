@@ -1,10 +1,11 @@
-import KnowledgeGraph from './components/KnowledgeGraph'
-import Login from './components/Login'
+/* eslint-disable react/react-in-jsx-scope */
+import ZustandExample from './components/Example'
 
 function App() {
     return (
         <div className="App">
-            <KnowledgeGraph></KnowledgeGraph>
+            {/* <KnowledgeGraph></KnowledgeGraph> */}
+            <ZustandExample />
             {/* <Login></Login> */}
         </div>
     )
