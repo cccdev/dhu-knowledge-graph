@@ -1,12 +1,45 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input } from 'antd'
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import './index.css'
+import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Form, Input, message } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import './index.less'
+import request from '@/utils/request'
 
 const LoginForm: React.FC = () => {
+    const [codeImg, setCodeImg ] = useState('')
+    const navigate = useNavigate()
+
+    let initCodeFlag = false;
+    useEffect (()=>{
+        if(!initCodeFlag)
+            initCodeImg();
+        initCodeFlag = true;
+    }, [])
+
+    const initCodeImg = ()=>{
+        request.get('/user/verifyCode',{
+            responseType: 'arraybuffer'
+        })
+        .then((res)=>{
+            setCodeImg('data:image/png;base64,' + btoa(String.fromCharCode(...new Uint8Array(res))))
+        })
+    }
+
     const onFinish = (values: any) => {
-        console.log('Received values of form: ', values)
+        request.post('/user/proLogin',values,{
+            params: values
+        })
+        .then(res=>{
+            if(res.code === 0)
+            {
+                message.success(res.msg)
+                localStorage.setItem('userData', JSON.stringify({isLoggedIn: true, userName: values.userName}))
+                navigate('/')
+            }else{
+                initCodeImg();
+                message.error(res.msg)
+            }
+        })
     }
 
     return (
@@ -19,7 +52,7 @@ const LoginForm: React.FC = () => {
             onFinish={onFinish}
         >
             <Form.Item
-                name="username"
+                name="mobile"
                 rules={[
                     {
                         required: true,
@@ -32,7 +65,7 @@ const LoginForm: React.FC = () => {
                 ]}
             >
                 <Input
-                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    prefix={<MobileOutlined className="site-form-item-icon" />}
                     placeholder="手机号"
                 />
             </Form.Item>
@@ -51,12 +84,29 @@ const LoginForm: React.FC = () => {
                     placeholder="密码"
                 />
             </Form.Item>
+            <div id="vefifyCode">
+                <Form.Item
+                    name="vercode"
+                    rules={[
+                        {
+                            required: true,
+                            message: '请确认验证码！',
+                        },
+                    ]}  
+                >
+                    <Input
+                        prefix={<SafetyOutlined className="site-form-item-icon" />}
+                        placeholder="验证码"
+                    />
+                </Form.Item>
+                <img style={{height: '32px', cursor: 'pointer'}} onClick={initCodeImg} src={codeImg}/>
+            </div>
             <Form.Item>
                 <Form.Item name="remember" valuePropName="checked" noStyle>
                     <Checkbox>记住我</Checkbox>
                 </Form.Item>
 
-                <a className="login-form-forgot" href="javascript:;">
+                <a className="login-form-forgot" href="#">
                     忘记密码
                 </a>
             </Form.Item>

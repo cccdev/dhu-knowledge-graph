@@ -4,7 +4,7 @@
  * 详细参考：
  * https://blog.openreplay.com/zustand-simple-modern-state-management-for-react
  */
-import { ExampleContext } from '@/context/example'
+import { UserContext } from '@/context'
 import { Button } from 'antd'
 import React from 'react'
 import create from 'zustand'
@@ -47,7 +47,7 @@ const ZustandExample: React.FC<ZustandExampleProps> = (props) => {
     const votes = useStore((state) => state.Votes)
     const fetch = useStore((state) => state.fetch)
     return (
-        <ExampleContext.Provider value="我想提供的一些context">
+        <UserContext.Provider value="我想提供的一些context">
             <h1>共有{getVotes}人投票</h1>
             <Button onClick={addVotes}>增加票数</Button>
             <Button onClick={subtractVotes}>减少票数</Button>
@@ -60,7 +60,7 @@ const ZustandExample: React.FC<ZustandExampleProps> = (props) => {
                 获取票数
             </Button>
             <Child />
-        </ExampleContext.Provider>
+        </UserContext.Provider>
     )
 }
 

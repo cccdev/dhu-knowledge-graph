@@ -1,13 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
-import App from '@/App'
-import ErrorPage from '@/components/ErrorPage'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
+import Home from '@/pages/Home'
+import ErrorPage from '@/pages/ErrorPage'
+import Login from '@/pages/Login'
+import Register from '@/pages/Register'
 import { createBrowserRouter } from 'react-router-dom'
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />,
+        element: <Home />,
         errorElement: <ErrorPage />,
     },
     {
