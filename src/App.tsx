@@ -6,7 +6,6 @@ import React from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes/routes'
 
-
 const App: React.FC = (props) => {
     return (
         <div className="App">

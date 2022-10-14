@@ -6,11 +6,10 @@ import './index.less'
 import LoginForm from './LoginForm'
 
 const Login: React.FC = () => {
-    const { userData } = useContext(UserContext);
-    const navigate = useNavigate();
-    useEffect(()=>{
-        if(userData.isLoggedIn)
-            navigate('/')
+    const { userData } = useContext(UserContext)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (userData.isLoggedIn) navigate('/')
     }, [])
     return (
         <div className="loginOuter">

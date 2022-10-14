@@ -1,42 +1,50 @@
-import { LockOutlined, UserOutlined, SafetyOutlined, MobileOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message  } from 'antd'
+import {
+    LockOutlined,
+    UserOutlined,
+    SafetyOutlined,
+    MobileOutlined,
+} from '@ant-design/icons'
+import { Button, Form, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
 import request from '@/utils/request'
 
 const RegisterForm: React.FC = () => {
-    const [codeImg, setCodeImg ] = useState('')
+    const [codeImg, setCodeImg] = useState('')
     const navigate = useNavigate()
 
-    let initCodeFlag = false;
-    useEffect(()=>{
-        if(!initCodeFlag)
-            initCodeImg()
-        initCodeFlag = true;
+    let initCodeFlag = false
+    useEffect(() => {
+        if (!initCodeFlag) initCodeImg()
+        initCodeFlag = true
     }, [])
-    const initCodeImg = ()=>{
-        request.get('/user/verifyCode',{
-            responseType: 'arraybuffer'
-        })
-        .then((res)=>{
-            setCodeImg('data:image/png;base64,' + btoa(String.fromCharCode(...new Uint8Array(res))))
-        })
+    const initCodeImg = () => {
+        request
+            .get('/user/verifyCode', {
+                responseType: 'arraybuffer',
+            })
+            .then((res) => {
+                setCodeImg(
+                    'data:image/png;base64,' +
+                        btoa(String.fromCharCode(...new Uint8Array(res)))
+                )
+            })
     }
     const onFinish = (values: any) => {
-        request.post('/user/proRegister',values,{
-            params: values
-        })
-        .then(res=>{
-            if(res.code === 0)
-            {
-                message.success(res.msg)
-                navigate('/login')
-            }else{
-                initCodeImg();
-                message.error(res.msg)
-            }
-        })
+        request
+            .post('/user/proRegister', values, {
+                params: values,
+            })
+            .then((res) => {
+                if (res.code === 0) {
+                    message.success(res.msg)
+                    navigate('/login')
+                } else {
+                    initCodeImg()
+                    message.error(res.msg)
+                }
+            })
     }
 
     return (
@@ -93,7 +101,8 @@ const RegisterForm: React.FC = () => {
                     },
                     {
                         pattern: /^[a-zA-Z]\w{5,17}$/,
-                        message: '以字母开头，长度在6~18之间，只能包含字母、数字和下划线！',
+                        message:
+                            '以字母开头，长度在6~18之间，只能包含字母、数字和下划线！',
                     },
                 ]}
             >
@@ -136,21 +145,27 @@ const RegisterForm: React.FC = () => {
                             required: true,
                             message: '请确认验证码！',
                         },
-                    ]}  
+                    ]}
                 >
                     <Input
-                        prefix={<SafetyOutlined className="site-form-item-icon" />}
+                        prefix={
+                            <SafetyOutlined className="site-form-item-icon" />
+                        }
                         placeholder="验证码"
                     />
                 </Form.Item>
-                <img style={{height: '32px', cursor: 'pointer'}} onClick={initCodeImg} src={codeImg}/>
+                <img
+                    style={{ height: '32px', cursor: 'pointer' }}
+                    onClick={initCodeImg}
+                    src={codeImg}
+                />
             </div>
             <Form.Item>
                 <Button
                     type="primary"
                     htmlType="submit"
                     className="login-form-button"
-                    style={{marginRight: '20px'}}
+                    style={{ marginRight: '20px' }}
                 >
                     注册
                 </Button>

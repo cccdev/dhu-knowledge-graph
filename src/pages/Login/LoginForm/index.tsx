@@ -6,40 +6,49 @@ import './index.less'
 import request from '@/utils/request'
 
 const LoginForm: React.FC = () => {
-    const [codeImg, setCodeImg ] = useState('')
+    const [codeImg, setCodeImg] = useState('')
     const navigate = useNavigate()
 
-    let initCodeFlag = false;
-    useEffect (()=>{
-        if(!initCodeFlag)
-            initCodeImg();
-        initCodeFlag = true;
+    let initCodeFlag = false
+    useEffect(() => {
+        if (!initCodeFlag) initCodeImg()
+        initCodeFlag = true
     }, [])
 
-    const initCodeImg = ()=>{
-        request.get('/user/verifyCode',{
-            responseType: 'arraybuffer'
-        })
-        .then((res)=>{
-            setCodeImg('data:image/png;base64,' + btoa(String.fromCharCode(...new Uint8Array(res))))
-        })
+    const initCodeImg = () => {
+        request
+            .get('/user/verifyCode', {
+                responseType: 'arraybuffer',
+            })
+            .then((res) => {
+                setCodeImg(
+                    'data:image/png;base64,' +
+                        btoa(String.fromCharCode(...new Uint8Array(res)))
+                )
+            })
     }
 
     const onFinish = (values: any) => {
-        request.post('/user/proLogin',values,{
-            params: values
-        })
-        .then(res=>{
-            if(res.code === 0)
-            {
-                message.success(res.msg)
-                localStorage.setItem('userData', JSON.stringify({isLoggedIn: true, userName: values.userName}))
-                navigate('/')
-            }else{
-                initCodeImg();
-                message.error(res.msg)
-            }
-        })
+        request
+            .post('/user/proLogin', values, {
+                params: values,
+            })
+            .then((res) => {
+                if (res.code === 0) {
+                    message.success(res.msg)
+                    localStorage.setItem(
+                        'userData',
+                        JSON.stringify({
+                            isLoggedIn: true,
+                            userName: values.userName,
+                        })
+                    )
+                    navigate('/')
+                } else {
+                    initCodeImg()
+                    message.error(res.msg)
+                }
+            })
     }
 
     return (
@@ -92,14 +101,20 @@ const LoginForm: React.FC = () => {
                             required: true,
                             message: '请确认验证码！',
                         },
-                    ]}  
+                    ]}
                 >
                     <Input
-                        prefix={<SafetyOutlined className="site-form-item-icon" />}
+                        prefix={
+                            <SafetyOutlined className="site-form-item-icon" />
+                        }
                         placeholder="验证码"
                     />
                 </Form.Item>
-                <img style={{height: '32px', cursor: 'pointer'}} onClick={initCodeImg} src={codeImg}/>
+                <img
+                    style={{ height: '32px', cursor: 'pointer' }}
+                    onClick={initCodeImg}
+                    src={codeImg}
+                />
             </div>
             <Form.Item>
                 <Form.Item name="remember" valuePropName="checked" noStyle>
