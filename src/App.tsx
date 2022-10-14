@@ -3,14 +3,14 @@
  * @description App
  */
 import React from 'react'
-import ZustandExample from './components/Example/zustand'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes/routes'
+
 
 const App: React.FC = (props) => {
     return (
         <div className="App">
-            {/* <KnowledgeGraph></KnowledgeGraph> */}
-            <ZustandExample />
-            {/* <Login></Login> */}
+            <RouterProvider router={router} />
         </div>
     )
 }

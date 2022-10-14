@@ -4,4 +4,8 @@
  */
 import { createContext } from 'react'
 
-export const ExampleContext = createContext('默认数据')
+export const UserContext = createContext({
+  userData: {},
+  setUserData: null
+})
+
