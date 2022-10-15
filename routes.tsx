@@ -1,8 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Home from '@/pages/Home'
 import ErrorPage from '@/pages/ErrorPage'
+import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
+import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 export const router = createBrowserRouter([
     {

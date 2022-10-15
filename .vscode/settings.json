@@ -4,5 +4,6 @@
     "echarts",
     "osgraph",
     "zustand"
-  ]
+  ],
+  "editor.formatOnSave": false
 }

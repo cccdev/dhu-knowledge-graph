@@ -3,8 +3,12 @@ import { useRouteError } from 'react-router-dom'
 import './index.less'
 
 export default function ErrorPage() {
-    const error = useRouteError()
-    console.error(error)
+    type RouteError = {
+        statusText: string
+        message: string
+    }
+    const error = useRouteError() as RouteError
+    // console.error(error)
 
     return (
         <React.Fragment>

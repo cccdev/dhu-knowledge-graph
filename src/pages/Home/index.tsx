@@ -1,5 +1,4 @@
-import React from 'react'
-import { useRouteError, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import './index.less'
 
 export default function ErrorPage() {

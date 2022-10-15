@@ -1,4 +1,4 @@
-import { UserContext } from '@/context'
+import { UserContext } from 'context'
 import React, { useContext } from 'react'
 
 export const Child: React.FC = () => {
