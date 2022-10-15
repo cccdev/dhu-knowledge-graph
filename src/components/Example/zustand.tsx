@@ -4,8 +4,8 @@
  * 详细参考：
  * https://blog.openreplay.com/zustand-simple-modern-state-management-for-react
  */
+import { UserContext } from '@/context'
 import { Button } from 'antd'
-import { UserContext } from 'context'
 import React from 'react'
 import create from 'zustand'
 import { Child } from './child'
