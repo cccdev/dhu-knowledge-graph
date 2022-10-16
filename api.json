@@ -1,0 +1,738 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Api Documentation",
+        "description": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            "name": "小波",
+            "url": "www.dhu.edu",
+            "email": "3489339091@qq.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        },
+        "version": "版本1.0"
+    },
+    "servers": [
+        { "url": "http://localhost:8085", "description": "Inferred Url" }
+    ],
+    "tags": [
+        { "name": "oss文件的上传和删除", "description": "Oss Controller" },
+        { "name": "检索相关", "description": "Search Controller" },
+        { "name": "用户的登录和注册相关", "description": "User Controller" },
+        { "name": "首页和各种功能相关", "description": "Home Controller" }
+    ],
+    "paths": {
+        "/home/addPoint": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "添加知识结点,pointName为知识结点名字或者知识标题，beforePointId为其父级结点",
+                "operationId": "addPointUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointName",
+                        "in": "query",
+                        "description": "pointName",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "beforePointId",
+                        "in": "query",
+                        "description": "beforePointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/beforePoint": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "返回上一级知识点,pointId为当前详情结点id或者当前列表的父级别id",
+                "operationId": "toBeforePointUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/beforePointDetail": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "返回上一级知识点详情,pointId为当前结点id",
+                "operationId": "toBeforePointDetailUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/beforePointList": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "返回上一级所有知识点的列表,pointId为当前列表父级别结点id或者当前详情结点id",
+                "operationId": "toBeforePointListUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/deletePoint": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "删除文件,并删除数据库内容",
+                "operationId": "deletePointUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/detail": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "获取知识点详情或者结点的文件地址",
+                "operationId": "detailUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/nextPointList": {
+            "post": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "下一级所有知识点的列表,pointId为上一级知识点id",
+                "operationId": "nextPointsUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointId",
+                        "in": "query",
+                        "description": "pointId",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/home/toHome": {
+            "get": {
+                "tags": ["首页和各种功能相关"],
+                "summary": "首页知识点信息",
+                "operationId": "toHomeUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/oss/delete": {
+            "post": {
+                "tags": ["oss文件的上传和删除"],
+                "summary": "删除文件,并删除数据库内容",
+                "operationId": "deleteUsingPOST",
+                "parameters": [
+                    {
+                        "name": "fileUrl",
+                        "in": "query",
+                        "description": "fileUrl",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/oss/upload": {
+            "post": {
+                "tags": ["oss文件的上传和删除"],
+                "summary": "上传一个文件，返回下载地址,数据库生成地址对象等",
+                "operationId": "uploadUsingPOST",
+                "parameters": [
+                    {
+                        "name": "beforePointId",
+                        "in": "query",
+                        "description": "父节点（不能从表单读取，非必须）",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "content",
+                        "in": "query",
+                        "description": "知识点内容",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "degree",
+                        "in": "query",
+                        "description": "知识点难度等级",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "multipartFile",
+                        "in": "query",
+                        "description": "上传的文件",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string", "format": "binary" }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "知识标签",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "知识点标题",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«string»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/search/all": {
+            "post": {
+                "tags": ["检索相关"],
+                "summary": "各种搜索各个带文件结点",
+                "operationId": "searchUsingPOST",
+                "parameters": [
+                    {
+                        "name": "content",
+                        "in": "query",
+                        "description": "知识点内容",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "degree",
+                        "in": "query",
+                        "description": "知识点难度等级",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "fileName",
+                        "in": "query",
+                        "description": "文件名字",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "知识标签",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "知识点标题",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "uploadName",
+                        "in": "query",
+                        "description": "上传作者",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/search/point": {
+            "post": {
+                "tags": ["检索相关"],
+                "summary": "模糊搜索各个结点",
+                "operationId": "searchPointUsingPOST",
+                "parameters": [
+                    {
+                        "name": "pointName",
+                        "in": "query",
+                        "description": "pointName",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«object»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/user/login": {
+            "get": {
+                "tags": ["用户的登录和注册相关"],
+                "summary": "跳转到登录界面",
+                "operationId": "toLoginUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "*/*": { "schema": { "type": "string" } } }
+                    },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/user/proLogin": {
+            "post": {
+                "tags": ["用户的登录和注册相关"],
+                "summary": "验证登录信息并登录",
+                "operationId": "proLoginUsingPOST",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "11位用户电话号码",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "用户密码",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "vercode",
+                        "in": "query",
+                        "description": "验证码结果",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "integer", "format": "int32" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«boolean»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/user/proRegister": {
+            "post": {
+                "tags": ["用户的登录和注册相关"],
+                "summary": "验证注册信息并注册",
+                "operationId": "registerUsingPOST",
+                "parameters": [
+                    {
+                        "name": "mobile",
+                        "in": "query",
+                        "description": "11位用户电话号码",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "用户注册的密码",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "rePassword",
+                        "in": "query",
+                        "description": "重复密码",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "用户昵称",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "vercode",
+                        "in": "query",
+                        "description": "验证码结果",
+                        "required": false,
+                        "style": "form",
+                        "schema": { "type": "integer", "format": "int32" }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultBean«boolean»"
+                                }
+                            }
+                        }
+                    },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/user/register": {
+            "get": {
+                "tags": ["用户的登录和注册相关"],
+                "summary": "跳转到注册页面",
+                "operationId": "toRegisterUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": { "*/*": { "schema": { "type": "string" } } }
+                    },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        },
+        "/user/verifyCode": {
+            "get": {
+                "tags": ["用户的登录和注册相关"],
+                "summary": "生成验证码",
+                "operationId": "getLoginVerifyCodeUsingGET",
+                "responses": {
+                    "200": { "description": "OK" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ResultBean": {
+                "title": "ResultBean",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "description": "状态码，成功时为0",
+                        "format": "int32",
+                        "example": 0
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "返回数据，失败时返回null"
+                    },
+                    "msg": { "type": "string", "description": "提示消息" }
+                },
+                "description": "json返回结果类"
+            },
+            "ResultBean«boolean»": {
+                "title": "ResultBean«boolean»",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "description": "状态码，成功时为0",
+                        "format": "int32",
+                        "example": 0
+                    },
+                    "data": {
+                        "type": "boolean",
+                        "description": "返回数据，失败时返回null",
+                        "example": false
+                    },
+                    "msg": { "type": "string", "description": "提示消息" }
+                },
+                "description": "json返回结果类"
+            },
+            "ResultBean«object»": {
+                "title": "ResultBean«object»",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "description": "状态码，成功时为0",
+                        "format": "int32",
+                        "example": 0
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "返回数据，失败时返回null"
+                    },
+                    "msg": { "type": "string", "description": "提示消息" }
+                },
+                "description": "json返回结果类"
+            },
+            "ResultBean«string»": {
+                "title": "ResultBean«string»",
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "description": "状态码，成功时为0",
+                        "format": "int32",
+                        "example": 0
+                    },
+                    "data": {
+                        "type": "string",
+                        "description": "返回数据，失败时返回null"
+                    },
+                    "msg": { "type": "string", "description": "提示消息" }
+                },
+                "description": "json返回结果类"
+            }
+        }
+    }
+}
