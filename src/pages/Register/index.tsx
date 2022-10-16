@@ -1,14 +1,15 @@
+import { CustomResponse } from '@/types'
+import request from '@/utils/request'
 import {
     LockOutlined,
-    UserOutlined,
-    SafetyOutlined,
     MobileOutlined,
+    SafetyOutlined,
+    UserOutlined,
 } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
-import request from '@/utils/request'
 
 const RegisterForm: React.FC = () => {
     const [codeImg, setCodeImg] = useState('')
@@ -20,31 +21,35 @@ const RegisterForm: React.FC = () => {
         initCodeFlag = true
     }, [])
     const initCodeImg = () => {
-        request
-            .get('/user/verifyCode', {
-                responseType: 'arraybuffer',
-            })
-            .then((res) => {
-                setCodeImg(
-                    'data:image/png;base64,' +
-                        btoa(String.fromCharCode(...new Uint8Array(res)))
-                )
-            })
+        request<CustomResponse>({
+            url: '/user/verifyCode',
+            method: 'get',
+            responseType: 'arraybuffer',
+        }).then((res) => {
+            setCodeImg(
+                'data:image/png;base64,' +
+                    btoa(
+                        String.fromCharCode(
+                            ...new Uint8Array(res as unknown as ArrayBufferLike)
+                        )
+                    )
+            )
+        })
     }
     const onFinish = (values: any) => {
-        request
-            .post('/user/proRegister', values, {
-                params: values,
-            })
-            .then((res) => {
-                if (res.code === 0) {
-                    message.success(res.msg)
-                    navigate('/login')
-                } else {
-                    initCodeImg()
-                    message.error(res.msg)
-                }
-            })
+        request<CustomResponse>({
+            url: '/user/proRegister',
+            method: 'post',
+            params: values,
+        }).then((res) => {
+            if (res.code === 0) {
+                message.success(res.msg)
+                navigate('/login')
+            } else {
+                initCodeImg()
+                message.error(res.msg)
+            }
+        })
     }
 
     return (
@@ -56,7 +61,7 @@ const RegisterForm: React.FC = () => {
             }}
             onFinish={onFinish}
         >
-            <h2 className='form-title'>注册</h2>
+            <h2 className="form-title">注册</h2>
             <Form.Item
                 name="userName"
                 rules={[

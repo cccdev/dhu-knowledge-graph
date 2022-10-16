@@ -4,7 +4,11 @@
  */
 import { createContext } from 'react'
 
+interface UserData {
+    isLoggedIn: boolean
+}
+
 export const UserContext = createContext({
-    userData: {},
+    userData: {} as UserData,
     setUserData: null,
 })

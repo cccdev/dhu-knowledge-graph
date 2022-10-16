@@ -1,61 +1,65 @@
+import { UserContext } from '@/context'
+import { CustomResponse } from '@/types'
+import request from '@/utils/request'
 import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input, message } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
-import request from '@/utils/request'
-import { UserContext } from '@/context'
 
 const LoginForm: React.FC = () => {
     const [codeImg, setCodeImg] = useState('')
     const navigate = useNavigate()
-    const { userData } = useContext (UserContext)
+    const { userData } = useContext(UserContext)
 
     let initCodeFlag = false
     useEffect(() => {
-        if (userData.isLoggedIn)
-        {
-            navigate('/');
-            return;
+        if (userData.isLoggedIn) {
+            navigate('/')
+            return
         }
         if (!initCodeFlag) initCodeImg()
         initCodeFlag = true
     }, [])
 
     const initCodeImg = () => {
-        request
-            .get('/user/verifyCode', {
-                responseType: 'arraybuffer',
-            })
-            .then((res) => {
-                setCodeImg(
-                    'data:image/png;base64,' +
-                        btoa(String.fromCharCode(...new Uint8Array(res)))
-                )
-            })
+        request<CustomResponse>({
+            url: '/user/verifyCode',
+            method: 'get',
+            responseType: 'arraybuffer',
+        }).then((res) => {
+            setCodeImg(
+                'data:image/png;base64,' +
+                    btoa(
+                        String.fromCharCode(
+                            ...new Uint8Array(res as unknown as ArrayBufferLike)
+                        )
+                    )
+            )
+        })
     }
 
     const onFinish = (values: any) => {
-        request
-            .post('/user/proLogin', values, {
-                params: values,
-            })
-            .then((res) => {
-                if (res.code === 0) {
-                    message.success(res.msg)
-                    localStorage.setItem(
-                        'userData',
-                        JSON.stringify({
-                            isLoggedIn: true,
-                            userName: values.userName,
-                        })
-                    )
-                    navigate('/')
-                } else {
-                    initCodeImg()
-                    message.error(res.msg)
-                }
-            })
+        request<CustomResponse>({
+            url: '/user/proLogin',
+            method: 'post',
+            params: values,
+        }).then((res) => {
+            if (res.code === 0) {
+                message.success(res.msg)
+                localStorage.setItem(
+                    'userData',
+                    JSON.stringify({
+                        isLoggedIn: true,
+                        userName: values.userName,
+                    })
+                )
+                navigate('/')
+            } else {
+                initCodeImg()
+                message.error(res.msg)
+            }
+        })
     }
 
     return (
@@ -67,7 +71,7 @@ const LoginForm: React.FC = () => {
             }}
             onFinish={onFinish}
         >
-            <h2 className='form-title'>登录</h2>
+            <h2 className="form-title">登录</h2>
             <Form.Item
                 name="mobile"
                 rules={[
@@ -101,7 +105,7 @@ const LoginForm: React.FC = () => {
                     placeholder="密码"
                 />
             </Form.Item>
-            <div id="vefifyCode">
+            <div id="verifyCode">
                 <Form.Item
                     name="vercode"
                     rules={[
