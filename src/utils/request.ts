@@ -6,7 +6,7 @@ const instance = axios.create({
     timeout: 6000, // 请求超时时间
 })
 
-const request = async <T>(
+export const request = async <T>(
     config: AxiosRequestConfig
 ): Promise<CustomResponse<T>> => {
     const { data } = await instance.request<CustomResponse<T>>(config)
@@ -23,7 +23,7 @@ instance.interceptors.request.use((config) => {
 
 // 返回拦截
 instance.interceptors.response.use((response) => {
-    return response.data
+    return response
 })
 
-export default request
+// export default request

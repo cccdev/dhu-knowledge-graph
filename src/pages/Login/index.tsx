@@ -1,6 +1,6 @@
 import { UserContext } from '@/context'
 import { CustomResponse } from '@/types'
-import request from '@/utils/request'
+import { request } from '@/utils/request'
 import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input, message } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'

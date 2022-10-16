@@ -5,5 +5,5 @@
     "osgraph",
     "zustand"
   ],
-  "editor.formatOnSave": false
+  "editor.formatOnSave": true
 }
