@@ -52,7 +52,7 @@ const Login: React.FC = () => {
                     'userData',
                     JSON.stringify({
                         isLoggedIn: true,
-                        userName: values.userName,
+                        mobile: values.mobile,
                     })
                 )
                 navigate('/')

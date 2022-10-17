@@ -61,6 +61,11 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
             ]}
         />
     )
+    let mobile = localStorage.getItem('userData')
+    if (mobile) {
+        mobile = JSON.parse(mobile).mobile
+    }
+
     return (
         <Header className="top-header">
             {/* <div className="login-register"> */}
@@ -80,7 +85,7 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
             </NavLink>
             {/* </div> */}
             <div className="welcome">
-                <span style={{ marginRight: '20px' }}>欢迎admin回来</span>
+                <span style={{ marginRight: '20px' }}>欢迎回来，{mobile}</span>
                 <Dropdown overlay={menu}>
                     <Avatar size="large" icon={<UserOutlined />}>
                         <DownOutlined />
