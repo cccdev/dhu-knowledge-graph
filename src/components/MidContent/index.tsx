@@ -7,7 +7,6 @@ import { GraphPoint } from '@/types'
 import { request } from '@/utils/request'
 import { Layout, message } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import Point from '../Points'
 
 export class MidContentProps {}
@@ -44,18 +43,6 @@ const MidContent: React.FC<MidContentProps> = (props) => {
     }, [])
     return (
         <Content style={{ padding: '0 50px' }}>
-            <NavLink
-                to="/login"
-                className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-                登录
-            </NavLink>
-            <NavLink
-                to="/register"
-                className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-                注册
-            </NavLink>
             <div className="site-layout-content">
                 <Point data={pointData} getNextPointList={getNextPointList} />
             </div>

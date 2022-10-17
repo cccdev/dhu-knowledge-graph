@@ -11,6 +11,7 @@ import {
 import { Avatar, Dropdown, Menu, MenuProps } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import './index.less'
 
 export class TopHeaderProps {}
@@ -55,21 +56,30 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                         </a>
                     ),
                     danger: true,
+                    theme: 'light',
                 },
             ]}
         />
     )
     return (
         <Header className="top-header">
-            <div className="logo" />
-            {/* <Menu
-                theme="light"
-                mode="horizontal"
-                defaultSelectedKeys={['2']}
-                // items={items}
-            /> */}
+            {/* <div className="login-register"> */}
+            <NavLink
+                to="/login"
+                className={({ isActive }) => (isActive ? 'current' : '')}
+                style={{ marginRight: '20px' }}
+            >
+                登录
+            </NavLink>
+            <NavLink
+                to="/register"
+                className={({ isActive }) => (isActive ? 'current' : '')}
+            >
+                注册
+            </NavLink>
+            {/* </div> */}
             <div className="welcome">
-                <span>欢迎admin回来</span>
+                <span style={{ marginRight: '20px' }}>欢迎admin回来</span>
                 <Dropdown overlay={menu}>
                     <Avatar size="large" icon={<UserOutlined />}>
                         <DownOutlined />
