@@ -65,7 +65,6 @@ const Login: React.FC = () => {
 
     return (
         <div className="login">
-            <img src={sunrise} className="login-img" />
             <Form
                 name="normal_login"
                 className="login-form"
@@ -164,6 +163,7 @@ const Login: React.FC = () => {
                     </NavLink>
                 </Form.Item>
             </Form>
+            <img src={sunrise} className="login-img" />
         </div>
     )
 }

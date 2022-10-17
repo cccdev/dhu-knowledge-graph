@@ -55,7 +55,6 @@ const RegisterForm: React.FC = () => {
 
     return (
         <div className="register">
-            <img src={sunrise} className="register-img" />
             <Form
                 name="normal_register"
                 className="register-form"
@@ -198,6 +197,7 @@ const RegisterForm: React.FC = () => {
                     </NavLink>
                 </Form.Item>
             </Form>
+            <img src={sunrise} className="register-img" />
         </div>
     )
 }
