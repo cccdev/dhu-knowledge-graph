@@ -3,7 +3,7 @@ import { UserContext } from '@/context'
 import { CustomResponse } from '@/types'
 import { request } from '@/utils/request'
 import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input, message } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
@@ -129,21 +129,14 @@ const Login: React.FC = () => {
                         />
                     </Form.Item>
                     <img
-                        style={{ height: '32px', cursor: 'pointer' }}
+                        style={{
+                            height: '32px',
+                            cursor: 'pointer',
+                        }}
                         onClick={initCodeImg}
                         src={codeImg}
                     />
                 </div>
-                <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>记住我</Checkbox>
-                    </Form.Item>
-
-                    <a className="login-form-forgot" href="#">
-                        忘记密码
-                    </a>
-                </Form.Item>
-
                 <Form.Item>
                     <Button
                         type="primary"
@@ -152,15 +145,24 @@ const Login: React.FC = () => {
                     >
                         登录
                     </Button>
-                    &nbsp;
-                    <NavLink
-                        to="/register"
-                        className={({ isActive }) =>
-                            isActive ? 'current' : ''
-                        }
-                    >
-                        立即注册
-                    </NavLink>
+                    <div className="login-control">
+                        <NavLink
+                            to="/register"
+                            className={({ isActive }) =>
+                                isActive ? 'current' : ''
+                            }
+                        >
+                            立即注册
+                        </NavLink>
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                isActive ? 'current' : ''
+                            }
+                        >
+                            返回主页
+                        </NavLink>
+                    </div>
                 </Form.Item>
             </Form>
             <img src={sunrise} className="login-img" />
