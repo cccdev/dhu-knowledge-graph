@@ -20,11 +20,14 @@ export interface PointProps {
 const Point: React.FC<PointProps> = (props) => {
     const { data, getNextPointList } = props
     return (
-        <div id="points-card">
+        <div
+            className="points-card"
+            style={{ display: 'flex', flexWrap: 'wrap' }}
+        >
             {data.map((e) => (
                 <Card
                     key={e.pointId}
-                    style={{ width: 300 }}
+                    style={{ width: 300, marginLeft: '15px' }}
                     cover={
                         <img
                             alt="example"
@@ -38,7 +41,7 @@ const Point: React.FC<PointProps> = (props) => {
                     ]}
                 >
                     <Meta
-                        onClick={() => getNextPointList(e.pointId)}
+                        // onClick={() => getNextPointList(e.pointId)}
                         avatar={
                             <Avatar src="https://joeschmoe.io/api/v1/random" />
                         }
