@@ -64,10 +64,11 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
     return (
         <Header className="top-header">
             {/* <div className="login-register"> */}
+            <span>首页</span>
             <NavLink
                 to="/login"
                 className={({ isActive }) => (isActive ? 'current' : '')}
-                style={{ marginRight: '20px' }}
+                style={{ margin: '0 20px' }}
             >
                 登录
             </NavLink>
