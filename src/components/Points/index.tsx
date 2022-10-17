@@ -14,7 +14,7 @@ import React from 'react'
 
 export interface PointProps {
     data: GraphPoint[]
-    getNextPointList: (pointId: string) => void
+    getNextPointList: (pointId: string, pointName: string) => void
 }
 
 const Point: React.FC<PointProps> = (props) => {
@@ -26,6 +26,7 @@ const Point: React.FC<PointProps> = (props) => {
         >
             {data.map((e) => (
                 <Card
+                    onClick={() => getNextPointList(e.pointId, e.pointName)}
                     key={e.pointId}
                     style={{ width: 300, marginLeft: '15px' }}
                     cover={
@@ -41,7 +42,6 @@ const Point: React.FC<PointProps> = (props) => {
                     ]}
                 >
                     <Meta
-                        // onClick={() => getNextPointList(e.pointId)}
                         avatar={
                             <Avatar src="https://joeschmoe.io/api/v1/random" />
                         }

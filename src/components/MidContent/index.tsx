@@ -5,14 +5,17 @@
 const { Content } = Layout
 import { GraphPoint } from '@/types'
 import { request } from '@/utils/request'
-import { Layout, message } from 'antd'
+import { HomeOutlined, UserOutlined } from '@ant-design/icons'
+import { Breadcrumb, Layout, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Point from '../Points'
+import './index.less'
 
-export class MidContentProps {}
+export class MidContentProps { }
 
 const MidContent: React.FC<MidContentProps> = (props) => {
     const [pointData, setPointData] = useState<GraphPoint[]>([])
+    const [routes, setRoutes] = useState<GraphPoint[]>([{ pointId: 'index', pointName: '首页' }])
     const initPoints = () => {
         request({
             url: '/home/toHome',
@@ -24,12 +27,11 @@ const MidContent: React.FC<MidContentProps> = (props) => {
             }
         })
     }
-    // 同点击Points组件里的卡片，调用父组件的方法，更新data
-    const getNextPointList = (pointId: string) => {
+    const getDetail = (pointId: string) => {
         request({
-            url: '/home/nextPointList',
-            data: { pointId },
+            url: '/home/detail',
             method: 'post',
+            params: { pointId }
         }).then((res) => {
             if (res.code === 0) {
                 setPointData(res.data as GraphPoint[])
@@ -38,11 +40,49 @@ const MidContent: React.FC<MidContentProps> = (props) => {
             }
         })
     }
+    // 同点击Points组件里的卡片，调用父组件的方法，更新data
+    const getNextPointList = (pointId: string, pointName: string) => {
+        request({
+            url: '/home/nextPointList',
+            params: { pointId },
+            method: 'post',
+        }).then((res) => {
+            if (res.code === 0) {
+                setRoutes([...routes, { pointId, pointName }])
+                setPointData(res.data as GraphPoint[])
+            } else {
+                message.error(res.msg)
+            }
+        })
+    }
+    const jumpTo = (pointId: string) => {
+        let temp = "";
+        while (routes.length && temp != pointId)
+            temp = routes.pop()?.pointId as string;
+        if (temp === 'index')
+            routes.push({ pointId: 'index', pointName: '首页' });
+        setRoutes(routes)
+    }
     useEffect(() => {
         initPoints()
     }, [])
     return (
         <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb style={{ marginBottom: '15px' }}>
+                {
+                    routes.map(e => (
+                        <React.Fragment key={e.pointId}>
+                            <Breadcrumb.Item
+                                className='bread-crumb-item'
+                                onClick={
+                                    () => { jumpTo(e.pointId); e.pointId === 'index' ? initPoints() : getNextPointList(e.pointId, e.pointName) }
+                                }>
+                                {e.pointName}
+                            </Breadcrumb.Item>
+                        </React.Fragment>
+                    ))
+                }
+            </Breadcrumb>
             <div className="site-layout-content">
                 <Point data={pointData} getNextPointList={getNextPointList} />
             </div>
