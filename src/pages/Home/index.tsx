@@ -1,5 +1,7 @@
 import Mock from '@/components/Example/mock'
-import Graph from '@/components/Graph'
+import Points from '@/components/Points'
+import { request } from '@/utils/request'
+import { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import './index.less'
 
@@ -48,7 +50,7 @@ export default function ErrorPage() {
             >
                 注册
             </NavLink>
-            <Graph />
+            <Points data={pointData} getNextPointList={getNextPointList} />
             <Mock />
         </div>
     )
