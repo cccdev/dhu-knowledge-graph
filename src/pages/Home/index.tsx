@@ -1,3 +1,4 @@
+import Mock from '@/components/Example/mock'
 import Graph from '@/components/Graph'
 import { NavLink } from 'react-router-dom'
 import './index.less'
@@ -48,6 +49,7 @@ export default function ErrorPage() {
                 注册
             </NavLink>
             <Graph />
+            <Mock />
         </div>
     )
 }
