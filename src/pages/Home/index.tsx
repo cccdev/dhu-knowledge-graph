@@ -1,18 +1,19 @@
-import Mock from '@/components/Example/mock'
 import Points from '@/components/Points'
+import { GraphPoint } from '@/types'
 import { request } from '@/utils/request'
-import { useState, useEffect } from 'react'
+import { message } from 'antd'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import './index.less'
 
 export default function ErrorPage() {
-    const [pointData, setPointData] = useState([])
+    const [pointData, setPointData] = useState<GraphPoint[]>([])
     const initPoints = () => {
         request({
-            url: '/home/toHome'
-        }).then(res => {
+            url: '/home/toHome',
+        }).then((res) => {
             if (res.code === 0) {
-                setPointData(res.data)
+                setPointData(res.data as GraphPoint[])
             } else {
                 message.error(res.msg)
             }
@@ -23,10 +24,10 @@ export default function ErrorPage() {
         request({
             url: '/home/nextPointList',
             data: { pointId },
-            method: 'post'
-        }).then(res => {
+            method: 'post',
+        }).then((res) => {
             if (res.code === 0) {
-                setPointData(res.data)
+                setPointData(res.data as GraphPoint[])
             } else {
                 message.error(res.msg)
             }
@@ -51,7 +52,7 @@ export default function ErrorPage() {
                 注册
             </NavLink>
             <Points data={pointData} getNextPointList={getNextPointList} />
-            <Mock />
+            {/* <Mock /> */}
         </div>
     )
 }
