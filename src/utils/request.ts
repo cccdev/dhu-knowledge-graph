@@ -11,8 +11,8 @@ export const request = async <T>(
 ): Promise<CustomResponse<T>> => {
     const { data } = await instance.request<CustomResponse<T>>(config)
     data.code === 0
-        ? console.log(data.msg) // 成功消息提示
-        : console.error(data.msg) // 失败消息提示
+        ? console.log(data?.msg) // 成功消息提示
+        : console.error(data?.msg) // 失败消息提示
     return data
 }
 
