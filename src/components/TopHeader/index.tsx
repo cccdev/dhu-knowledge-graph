@@ -12,6 +12,7 @@ import { Avatar, Dropdown, Menu, MenuProps } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import DarkToggle from '../DarkToggle'
 import './index.less'
 
 export class TopHeaderProps {}
@@ -29,7 +30,7 @@ const items: MenuProps['items'] = [
 ]
 
 const TopHeader: React.FC<TopHeaderProps> = (props) => {
-    const menu = (
+    const controlMenu = (
         <Menu
             items={[
                 {
@@ -46,6 +47,32 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                 },
                 {
                     key: '2',
+                    label: (
+                        <NavLink
+                            to="/login"
+                            className={({ isActive }) =>
+                                isActive ? 'current' : ''
+                            }
+                        >
+                            登录
+                        </NavLink>
+                    ),
+                },
+                {
+                    key: '3',
+                    label: (
+                        <NavLink
+                            to="/register"
+                            className={({ isActive }) =>
+                                isActive ? 'current' : ''
+                            }
+                        >
+                            注册
+                        </NavLink>
+                    ),
+                },
+                {
+                    key: '4',
                     label: (
                         <a
                             target="_blank"
@@ -68,25 +95,10 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
 
     return (
         <Header className="top-header">
-            {/* <div className="login-register"> */}
-            <span>首页</span>
-            <NavLink
-                to="/login"
-                className={({ isActive }) => (isActive ? 'current' : '')}
-                style={{ margin: '0 20px' }}
-            >
-                登录
-            </NavLink>
-            <NavLink
-                to="/register"
-                className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-                注册
-            </NavLink>
-            {/* </div> */}
+            <DarkToggle />
             <div className="welcome">
-                <span style={{ marginRight: '20px' }}>欢迎回来，{mobile}</span>
-                <Dropdown overlay={menu}>
+                <span style={{ marginRight: '15px' }}>欢迎回来，{mobile}</span>
+                <Dropdown overlay={controlMenu}>
                     <Avatar size="large" icon={<UserOutlined />}>
                         <DownOutlined />
                     </Avatar>
