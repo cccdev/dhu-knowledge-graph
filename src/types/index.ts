@@ -3,10 +3,13 @@ export interface CustomResponse<T = any> {
     msg: string
     data: T
 }
-
+/**
+ * 后端传来的知识结点model
+ */
 export interface GraphPoint {
     pointId: string
     pointName: string
+    count: number
 }
 
 export type TreeNode = {
@@ -14,4 +17,5 @@ export type TreeNode = {
     children?: TreeNode[]
     pointId?: string
     value?: string
+    point?: GraphPoint
 }

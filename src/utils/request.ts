@@ -23,6 +23,7 @@ instance.interceptors.request.use((config) => {
 
 // 返回拦截
 instance.interceptors.response.use((response) => {
+    response
     return response
 })
 

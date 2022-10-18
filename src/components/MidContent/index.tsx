@@ -31,7 +31,7 @@ const MidContent: React.FC<MidContentProps> = (props) => {
         request({
             url: '/home/detail',
             method: 'post',
-            params: { pointId }
+            data: { pointId }
         }).then((res) => {
             if (res.code === 0) {
                 setPointData(res.data as GraphPoint[])
@@ -44,7 +44,7 @@ const MidContent: React.FC<MidContentProps> = (props) => {
     const getNextPointList = (pointId: string, pointName: string) => {
         request({
             url: '/home/nextPointList',
-            params: { pointId },
+            data: { pointId },
             method: 'post',
         }).then((res) => {
             if (res.code === 0) {

@@ -31,11 +31,11 @@ const Login: React.FC = () => {
         }).then((res) => {
             setCodeImg(
                 'data:image/png;base64,' +
-                    btoa(
-                        String.fromCharCode(
-                            ...new Uint8Array(res as unknown as ArrayBufferLike)
-                        )
+                btoa(
+                    String.fromCharCode(
+                        ...new Uint8Array(res as unknown as ArrayBufferLike)
                     )
+                )
             )
         })
     }
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         request<CustomResponse>({
             url: '/user/proLogin',
             method: 'post',
-            params: values,
+            data: values,
         }).then((res) => {
             if (res.code === 0) {
                 message.success(res.msg)

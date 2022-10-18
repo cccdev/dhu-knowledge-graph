@@ -1,3 +1,4 @@
+import Graph from '@/components/Graph'
 import MidContent from '@/components/MidContent'
 import TopHeader from '@/components/TopHeader'
 import { Layout } from 'antd'
@@ -9,7 +10,8 @@ const Home: React.FC = () => {
         <>
             <Layout className="layout">
                 <TopHeader />
-                <MidContent />
+                {/* <MidContent /> */}
+                <Graph></Graph>
             </Layout>
         </>
     )

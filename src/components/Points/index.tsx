@@ -46,7 +46,7 @@ const Point: React.FC<PointProps> = (props) => {
         request<CustomResponse>({
             url: '/home/addPoint',
             method: 'post',
-            params: {
+            data: {
                 pointName,
                 pointId: currentPoint.pointId
             },
