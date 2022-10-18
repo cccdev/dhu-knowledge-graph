@@ -21,7 +21,7 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps { }
+export class GraphProps {}
 
 const Graph: React.FC = () => {
     const [data, setData] = useState<Array<TreeNode>>()
@@ -29,11 +29,11 @@ const Graph: React.FC = () => {
     const [modalTitle, setModalTitle] = useState('首页')
     // 格式化数据，适配echarts
     const formatData = (data: TreeNode) => {
-        if (!data) return;
-        data.name = data.point.pointName;
-        data.value = data.count;
-        data.children.forEach(e => {
-            e.point.beforePointId = data.point?.pointId;
+        if (!data) return
+        data.name = data.point.pointName
+        data.value = data.count
+        data.children.forEach((e) => {
+            e.point.beforePointId = data.point?.pointId
             e.path = data.path + '/' + e.point.pointName
             formatData(e)
         })
@@ -42,15 +42,15 @@ const Graph: React.FC = () => {
         request({
             url: '/home/getAllChildren',
             params: { pointId: 0 },
-        }).then(res => {
+        }).then((res) => {
             res.data.path = 'home'
-            formatData(res.data, '');
+            formatData(res.data, '')
             setData(res.data.children)
         })
     }
     const [tempPoint] = useState({
         pointName: '',
-        beforePointId: '0'
+        beforePointId: '0',
     })
     // 添加结点
     const addNode = () => {
@@ -61,7 +61,7 @@ const Graph: React.FC = () => {
         }).then((res) => {
             if (res.code === 0) {
                 message.success(res.msg)
-                tempPoint.pointName = '';
+                tempPoint.pointName = ''
                 initData()
             } else {
                 message.error(res.msg)
@@ -72,21 +72,20 @@ const Graph: React.FC = () => {
         initData()
     }, [])
 
-
     // modal相关
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const showModal = () => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
     const handleOk = () => {
-        addNode();
-        setIsModalOpen(false);
-    };
+        addNode()
+        setIsModalOpen(false)
+    }
     const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+        setIsModalOpen(false)
+    }
     const handleChange = (e) => {
-        tempPoint.pointName = e.target.value;
+        tempPoint.pointName = e.target.value
     }
 
     // echarts配置
@@ -96,39 +95,39 @@ const Graph: React.FC = () => {
                 itemStyle: {
                     borderColor: '#777',
                     borderWidth: 0,
-                    gapWidth: 1
+                    gapWidth: 1,
                 },
                 upperLabel: {
-                    show: false
-                }
+                    show: false,
+                },
             },
             {
                 itemStyle: {
                     borderColor: '#555',
                     borderWidth: 5,
-                    gapWidth: 1
+                    gapWidth: 1,
                 },
                 emphasis: {
                     itemStyle: {
-                        borderColor: '#ddd'
-                    }
-                }
+                        borderColor: '#ddd',
+                    },
+                },
             },
             {
                 colorSaturation: [0.35, 0.5],
                 itemStyle: {
                     borderWidth: 5,
                     gapWidth: 1,
-                    borderColorSaturation: 0.6
-                }
-            }
-        ];
+                    borderColorSaturation: 0.6,
+                },
+            },
+        ]
     }
     const option: EChartsOption = {
         title: {
             text: 'DHU-专业实习',
             subtext: '2022/10',
-            left: 'center'
+            left: 'center',
         },
         tooltip: {
             trigger: 'item',
@@ -142,50 +141,49 @@ const Graph: React.FC = () => {
                 drillDownIcon: '▶',
                 label: {
                     show: true,
-                    formatter: '{b}'
+                    formatter: '{b}',
                 },
                 upperLabel: {
                     show: true,
-                    height: 30
+                    height: 30,
                 },
                 itemStyle: {
-                    borderColor: '#fff'
+                    borderColor: '#fff',
                 },
                 levels: getLevelOption(),
-                data: data
-            }
-        ]
+                data: data,
+            },
+        ],
     }
     function convert(source, target, basePath) {
-        for (let key in source) {
-            let path = basePath ? basePath + '.' + key : key;
+        for (const key in source) {
+            const path = basePath ? basePath + '.' + key : key
             if (!key.match(/^\$/)) {
-                target.children = target.children || [];
+                target.children = target.children || []
                 const child = {
-                    name: path
-                };
-                target.children.push(child);
-                convert(source[key], child, path);
+                    name: path,
+                }
+                target.children.push(child)
+                convert(source[key], child, path)
             }
         }
         if (!target.children) {
-            target.value = source.$count || 1;
+            target.value = source.$count || 1
         } else {
             target.children.push({
                 name: basePath,
-                value: source.$count
-            });
+                value: source.$count,
+            })
         }
     }
     // 处理echart元素的点击事件
     const handleEvents = {
         contextmenu: (params) => {
-            params.event.event.preventDefault(); // 阻止默认右键菜单
-            tempPoint.beforePointId = params.data.point.pointId;
+            params.event.event.preventDefault() // 阻止默认右键菜单
+            tempPoint.beforePointId = params.data.point.pointId
             setModalTitle(params.data.point.pointName)
-            showModal();
-
-        }
+            showModal()
+        },
     }
 
     return (
@@ -197,7 +195,12 @@ const Graph: React.FC = () => {
                 ref={chartRef}
                 style={{ height: '75vh', width: '100%' }}
             />
-            <Modal title={'在【' + modalTitle + '】下添加结点'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal
+                title={'在【' + modalTitle + '】下添加结点'}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
                 <p>知识点名称</p>
                 <Input placeholder="请输入知识点名称" onChange={handleChange} />
             </Modal>

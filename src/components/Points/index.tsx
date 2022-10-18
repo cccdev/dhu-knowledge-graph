@@ -16,30 +16,30 @@ import { request } from '@/utils/request'
 export interface PointProps {
     data: GraphPoint[]
     getNextPointList: (pointId: string, pointName: string) => void
-    currentPoint: { pointId: string, pointName: string }
+    currentPoint: { pointId: string; pointName: string }
     jumpTo: (pointId: string) => void
 }
 
 const Point: React.FC<PointProps> = (props) => {
     const { data, getNextPointList, currentPoint, jumpTo } = props
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const showModal = () => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
 
     const handleOk = () => {
-        addNode();
-        setIsModalOpen(false);
-    };
+        addNode()
+        setIsModalOpen(false)
+    }
 
     const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+        setIsModalOpen(false)
+    }
 
-    let pointName = '';
+    let pointName = ''
     const handleChange = (e) => {
-        pointName = e.target.value;
+        pointName = e.target.value
     }
 
     const addNode = () => {
@@ -48,12 +48,12 @@ const Point: React.FC<PointProps> = (props) => {
             method: 'post',
             data: {
                 pointName,
-                pointId: currentPoint.pointId
+                pointId: currentPoint.pointId,
             },
         }).then((res) => {
             if (res.code === 0) {
                 message.success(res.msg)
-                jumpTo(currentPoint.pointId);
+                jumpTo(currentPoint.pointId)
                 getNextPointList(currentPoint.pointId, currentPoint.pointName)
             } else {
                 message.error(res.msg)
@@ -95,9 +95,16 @@ const Point: React.FC<PointProps> = (props) => {
                 ))}
             </div>
             <div className="btn-container">
-                <Button type="primary" id="addNode" onClick={showModal}>添加结点</Button>
+                <Button type="primary" id="addNode" onClick={showModal}>
+                    添加结点
+                </Button>
             </div>
-            <Modal title="添加知识点" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal
+                title="添加知识点"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
                 <p>知识点名称</p>
                 <Input placeholder="请输入知识点名称" onChange={handleChange} />
             </Modal>

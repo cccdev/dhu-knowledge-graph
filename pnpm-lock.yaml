@@ -20,6 +20,7 @@ specifiers:
   lint-staged: ^13.0.3
   prettier: 2.7.1
   react: ^18.2.0
+  react-darkreader: ^1.5.6
   react-dom: ^18.2.0
   react-router-dom: ^6.4.1
   ts-node: ^10.9.1
@@ -34,6 +35,7 @@ dependencies:
   echarts-for-react: 3.0.2_echarts@5.3.3+react@18.2.0
   jotai: 1.8.6_react@18.2.0
   react: 18.2.0
+  react-darkreader: 1.5.6_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.4.1_biqbaboplfbrettd7655fr4n2y
 
@@ -1064,6 +1066,10 @@ packages:
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
     dev: true
+
+  /darkreader/4.9.58:
+    resolution: {integrity: sha512-D/JGoJqW3m2AWBLhO+Pev+eThfs+CwRT4bcLb/1zKjql2yVwG0lx8C2XRDdSVGHw4y11n26W7syWoBpUfuhMqQ==}
+    dev: false
 
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
@@ -2382,7 +2388,6 @@ packages:
   /object-assign/4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /object-inspect/1.12.2:
     resolution: {integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==}
@@ -2578,7 +2583,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /proxy-from-env/1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
@@ -3123,6 +3127,18 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /react-darkreader/1.5.6_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-z7ld0Jn2wC5B5Eqo+L8PYNWcHpKdLKIOKICbNkvldfC5bQBRqb2RFBYEbz6CfYxcgpXZUq3rJF2tq4wIWUaF0Q==}
+    peerDependencies:
+      react: ^16.8.6
+    dependencies:
+      darkreader: 4.9.58
+      react: 18.2.0
+      react-switch: 6.1.0_biqbaboplfbrettd7655fr4n2y
+    transitivePeerDependencies:
+      - react-dom
+    dev: false
+
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
@@ -3162,6 +3178,17 @@ packages:
     dependencies:
       '@remix-run/router': 1.0.1
       react: 18.2.0
+    dev: false
+
+  /react-switch/6.1.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-cOwQkxtHCOGtoK0KN3kZBPTQjt8P1TTpaor+TS0AJRLfFBIRkgjVIUCwAfvVlW32Bi1BK333rk9y/14suD38SA==}
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react/18.2.0:
