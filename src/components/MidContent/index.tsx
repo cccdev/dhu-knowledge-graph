@@ -5,19 +5,21 @@
 const { Content } = Layout
 import { GraphPoint } from '@/types'
 import { request } from '@/utils/request'
-import { HomeOutlined, UserOutlined } from '@ant-design/icons'
 import { Breadcrumb, Layout, message } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { atom, useAtom } from 'jotai'
+import React, { useEffect } from 'react'
 import Point from '../Points'
 import './index.less'
 
-export class MidContentProps { }
+export class MidContentProps {}
+
+const pointDataAtom = atom<GraphPoint[]>([])
+const routesAtom = atom([{ pointId: 'index', pointName: '首页' }])
 
 const MidContent: React.FC<MidContentProps> = (props) => {
-    const [pointData, setPointData] = useState<GraphPoint[]>([])
-    const [routes, setRoutes] = useState<GraphPoint[]>([
-        { pointId: 'index', pointName: '首页' },
-    ])
+    const [pointData, setPointData] = useAtom(pointDataAtom)
+    const [routes, setRoutes] = useAtom(routesAtom)
+
     const initPoints = () => {
         request({
             url: '/home/toHome',
@@ -33,7 +35,7 @@ const MidContent: React.FC<MidContentProps> = (props) => {
         request({
             url: '/home/detail',
             method: 'post',
-            data: { pointId }
+            data: { pointId },
         }).then((res) => {
             if (res.code === 0) {
                 setPointData(res.data as GraphPoint[])
@@ -88,7 +90,12 @@ const MidContent: React.FC<MidContentProps> = (props) => {
                 ))}
             </Breadcrumb>
             <div className="site-layout-content">
-                <Point data={pointData} getNextPointList={getNextPointList} currentPoint={routes[routes.length - 1]} jumpTo={jumpTo} />
+                <Point
+                    data={pointData}
+                    getNextPointList={getNextPointList}
+                    currentPoint={routes[routes.length - 1]}
+                    jumpTo={jumpTo}
+                />
             </div>
         </Content>
     )
