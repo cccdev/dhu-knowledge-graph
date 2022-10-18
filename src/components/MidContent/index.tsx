@@ -84,7 +84,7 @@ const MidContent: React.FC<MidContentProps> = (props) => {
                 }
             </Breadcrumb>
             <div className="site-layout-content">
-                <Point data={pointData} getNextPointList={getNextPointList} />
+                <Point data={pointData} getNextPointList={getNextPointList} currentPoint={routes[routes.length - 1]} jumpTo={jumpTo} />
             </div>
         </Content>
     )
