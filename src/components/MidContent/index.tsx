@@ -15,7 +15,9 @@ export class MidContentProps { }
 
 const MidContent: React.FC<MidContentProps> = (props) => {
     const [pointData, setPointData] = useState<GraphPoint[]>([])
-    const [routes, setRoutes] = useState<GraphPoint[]>([{ pointId: 'index', pointName: '首页' }])
+    const [routes, setRoutes] = useState<GraphPoint[]>([
+        { pointId: 'index', pointName: '首页' },
+    ])
     const initPoints = () => {
         request({
             url: '/home/toHome',
@@ -56,11 +58,11 @@ const MidContent: React.FC<MidContentProps> = (props) => {
         })
     }
     const jumpTo = (pointId: string) => {
-        let temp = "";
+        let temp = ''
         while (routes.length && temp != pointId)
-            temp = routes.pop()?.pointId as string;
+            temp = routes.pop()?.pointId as string
         if (temp === 'index')
-            routes.push({ pointId: 'index', pointName: '首页' });
+            routes.push({ pointId: 'index', pointName: '首页' })
         setRoutes(routes)
     }
     useEffect(() => {
@@ -69,19 +71,21 @@ const MidContent: React.FC<MidContentProps> = (props) => {
     return (
         <Content style={{ padding: '0 50px' }}>
             <Breadcrumb style={{ marginBottom: '15px' }}>
-                {
-                    routes.map(e => (
-                        <React.Fragment key={e.pointId}>
-                            <Breadcrumb.Item
-                                className='bread-crumb-item'
-                                onClick={
-                                    () => { jumpTo(e.pointId); e.pointId === 'index' ? initPoints() : getNextPointList(e.pointId, e.pointName) }
-                                }>
-                                {e.pointName}
-                            </Breadcrumb.Item>
-                        </React.Fragment>
-                    ))
-                }
+                {routes.map((e) => (
+                    <React.Fragment key={e.pointId}>
+                        <Breadcrumb.Item
+                            className="bread-crumb-item"
+                            onClick={() => {
+                                jumpTo(e.pointId)
+                                e.pointId === 'index'
+                                    ? initPoints()
+                                    : getNextPointList(e.pointId, e.pointName)
+                            }}
+                        >
+                            {e.pointName}
+                        </Breadcrumb.Item>
+                    </React.Fragment>
+                ))}
             </Breadcrumb>
             <div className="site-layout-content">
                 <Point data={pointData} getNextPointList={getNextPointList} currentPoint={routes[routes.length - 1]} jumpTo={jumpTo} />
