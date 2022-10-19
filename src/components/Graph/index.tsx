@@ -23,7 +23,7 @@ type EChartsOption = echarts.ComposeOption<
 >
 
 export class GraphProps {}
-const contextMenuStyleAtom = atom({
+export const contextMenuStyleAtom = atom({
     top: '',
     left: '',
     visibility: 'hidden',
@@ -33,6 +33,10 @@ const Graph: React.FC = () => {
     const [data, setData] = useState<TreeNode[]>()
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
+    const [tempPoint] = useState({
+        pointName: '',
+        beforePointId: '0',
+    })
 
     // 格式化数据，适配echarts
     const formatData = (data: TreeNode) => {
@@ -55,10 +59,6 @@ const Graph: React.FC = () => {
             setData(res.data.children)
         })
     }
-    const [tempPoint] = useState({
-        pointName: '',
-        beforePointId: '0',
-    })
 
     //Api相关
     /**
@@ -267,7 +267,6 @@ const Graph: React.FC = () => {
                 <p>{'确定删除【' + modalTitle + '】结点？'}</p>
             </Modal>
             <ContextMenu
-                style={contextMenuStyle}
                 showModal={showModal}
                 showDeleteModal={showDeleteModal}
                 showDetail={showDetail}

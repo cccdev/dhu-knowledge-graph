@@ -31,10 +31,14 @@ export interface PointDetail {
     uploadTime: string
 }
 
+/**
+ * ECharts节点
+ */
 export type TreeNode = {
     name: string
     children?: TreeNode[]
     pointId?: string
     value?: string
     point?: GraphPoint
+    path?: string
 }

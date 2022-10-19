@@ -1,14 +1,17 @@
+import { useAtom } from 'jotai'
 import React from 'react'
+import { contextMenuStyleAtom } from '../Graph'
 import './index.less'
+
 export interface ContextMenuProps {
-    style: { top: string; left: string; visibility: string }
-    showModal: any
-    showDeleteModal: any
-    showDetail: any
+    showModal: () => void
+    showDeleteModal: () => void
+    showDetail: () => void
 }
 
 const ContextMenu: React.FC<ContextMenuProps> = (props) => {
-    const { style, showModal, showDeleteModal, showDetail } = props
+    const { showModal, showDeleteModal, showDetail } = props
+    const [style] = useAtom(contextMenuStyleAtom)
     return (
         <div style={style} id="context-menu">
             <ul>
