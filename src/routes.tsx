@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import ErrorPage from '@/pages/ErrorPage'
 import Home from '@/pages/Home'
+import Detail from '@/pages/Detail'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import React from 'react'
@@ -19,4 +20,8 @@ export const router = createBrowserRouter([
         path: '/register',
         element: <Register />,
     },
+    {
+        path: '/detail',
+        element: <Detail />,
+    }
 ])

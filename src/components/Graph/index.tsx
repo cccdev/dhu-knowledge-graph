@@ -14,18 +14,20 @@ import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import React, { useEffect, useRef, useState } from 'react'
-
+import { Navigate, useNavigate } from 'react-router-dom'
+import ContextMenu from '../ContextMenu'
+import './index.less'
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
 
 type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps {}
+export class GraphProps { }
 
 const Graph: React.FC = () => {
     const [data, setData] = useState<Array<TreeNode>>()
-    const chartRef = useRef(null)
+    const navigate = useNavigate();
     const [modalTitle, setModalTitle] = useState('首页')
     // 格式化数据，适配echarts
     const formatData = (data: TreeNode) => {
@@ -43,7 +45,7 @@ const Graph: React.FC = () => {
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
-            res.data.path = 'home'
+            res.data.path = ''
             formatData(res.data, '')
             setData(res.data.children)
         })
@@ -52,6 +54,9 @@ const Graph: React.FC = () => {
         pointName: '',
         beforePointId: '0',
     })
+    /**
+     * Api相关
+     */
     // 添加结点
     const addNode = () => {
         request<CustomResponse>({
@@ -68,10 +73,23 @@ const Graph: React.FC = () => {
             }
         })
     }
-    useEffect(() => {
-        initData()
-    }, [])
-
+    const deleteNode = () => {
+        request<CustomResponse>({
+            url: '/home/deletePoint',
+            method: 'post',
+            data: {
+                pointId: tempPoint.beforePointId
+            },
+        }).then((res) => {
+            if (res.code === 0) {
+                message.success(res.msg)
+                tempPoint.pointName = ''
+                initData()
+            } else {
+                message.error(res.msg)
+            }
+        })
+    }
     // modal相关
     const [isModalOpen, setIsModalOpen] = useState(false)
     const showModal = () => {
@@ -86,6 +104,18 @@ const Graph: React.FC = () => {
     }
     const handleChange = (e) => {
         tempPoint.pointName = e.target.value
+    }
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const showDeleteModal = () => {
+        setIsDeleteModalOpen(true)
+    }
+    const handleDeleteOk = () => {
+        deleteNode()
+        setIsDeleteModalOpen(false)
+    }
+    const handleDeleteCancel = () => {
+        setIsDeleteModalOpen(false)
     }
 
     // echarts配置
@@ -109,7 +139,7 @@ const Graph: React.FC = () => {
                 },
                 emphasis: {
                     itemStyle: {
-                        borderColor: '#ddd',
+                        borderColor: '#aaa',
                     },
                 },
             },
@@ -124,21 +154,28 @@ const Graph: React.FC = () => {
         ]
     }
     const option: EChartsOption = {
+        toolbox: {
+            show: true
+        },
         title: {
             text: 'DHU-专业实习',
             subtext: '2022/10',
             left: 'center',
         },
         tooltip: {
+            show: true,
             trigger: 'item',
             triggerOn: 'mousemove',
+            formatter: (params, ticket, callback) => params.data.path,
+            extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
         },
         series: [
             {
                 name: '',
                 type: 'treemap',
-                visibleMin: 300,
                 drillDownIcon: '▶',
+                leafDepth: 3,
+                squareRatio: 1,
                 label: {
                     show: true,
                     formatter: '{b}',
@@ -151,59 +188,67 @@ const Graph: React.FC = () => {
                     borderColor: '#fff',
                 },
                 levels: getLevelOption(),
-                data: data,
+                data
             },
         ],
     }
-    function convert(source, target, basePath) {
-        for (const key in source) {
-            const path = basePath ? basePath + '.' + key : key
-            if (!key.match(/^\$/)) {
-                target.children = target.children || []
-                const child = {
-                    name: path,
-                }
-                target.children.push(child)
-                convert(source[key], child, path)
-            }
-        }
-        if (!target.children) {
-            target.value = source.$count || 1
-        } else {
-            target.children.push({
-                name: basePath,
-                value: source.$count,
-            })
-        }
-    }
-    // 处理echart元素的点击事件
-    const handleEvents = {
-        contextmenu: (params) => {
+    const handleChartReady = (chart) => {
+        chart.on('contextmenu', (params) => {
+            params.event.event.stopPropagation(); // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
+            setContextMenuStyle({
+                left: params.event.event.clientX + 'px',
+                top: params.event.event.clientY + 'px',
+                visibility: 'visible'
+            })
+            tempPoint.pointName = params.data.point.pointName
             tempPoint.beforePointId = params.data.point.pointId
             setModalTitle(params.data.point.pointName)
-            showModal()
-        },
+        })
     }
 
+    // 菜单栏style
+    const [contextMenuStyle, setContextMenuStyle] = useState({
+        top: '',
+        left: '',
+        visibility: 'hidden'
+    })
+
+    useEffect(() => {
+        initData();
+        document.addEventListener('click', (e) => { setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' }) });
+        document.addEventListener('scroll', (e) => { setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' }) });
+    }, [])
+
+    const showDetail = () => {
+        navigate('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
+        // window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
+    }
     return (
         <>
-            {/* <Button onClick={handleClick}>请求</Button> */}
             <ReactECharts
-                onEvents={handleEvents}
                 option={option}
-                ref={chartRef}
-                style={{ height: '75vh', width: '100%' }}
+                style={{ height: '80vh', width: '100%' }}
+                onChartReady={handleChartReady}
             />
             <Modal
-                title={'在【' + modalTitle + '】下添加结点'}
+                title={'添加'}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                <p>知识点名称</p>
+                <p>{'在【' + modalTitle + '】下添加结点'}</p>
                 <Input placeholder="请输入知识点名称" onChange={handleChange} />
             </Modal>
+            <Modal
+                title={'删除'}
+                open={isDeleteModalOpen}
+                onOk={handleDeleteOk}
+                onCancel={handleDeleteCancel}
+            >
+                <p>{'确定删除【' + modalTitle + '】结点？'}</p>
+            </Modal>
+            <ContextMenu style={contextMenuStyle} showModal={showModal} showDeleteModal={showDeleteModal} showDetail={showDetail}></ContextMenu>
         </>
     )
 }
