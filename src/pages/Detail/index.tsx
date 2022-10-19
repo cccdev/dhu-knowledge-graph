@@ -46,13 +46,7 @@ const Detail: React.FC = (props) => {
                             ))}
                         <h2>{data?.content}</h2>
                         <p>难度：{data?.degree}</p>
-                        {['jpg', 'png', 'gif', 'jpeg', 'webp'].includes(
-                            data.type
-                        ) ? (
-                            <img src={data?.addressId} alt="" />
-                        ) : (
-                            <iframe src={data?.addressId} />
-                        )}
+                        <embed src={data?.addressId} />
                     </div>
                 ) : (
                     <div className="no-detail">
