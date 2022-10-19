@@ -22,7 +22,7 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps {}
+export class GraphProps { }
 export const contextMenuStyleAtom = atom({
     top: '',
     left: '',
@@ -206,6 +206,7 @@ const Graph: React.FC = () => {
     }
     const handleChartReady = (chart: any) => {
         chart.on('contextmenu', (params: any) => {
+            if (params.name === undefined) return;
             params.event.event.stopPropagation() // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
             setContextMenuStyle({
@@ -228,17 +229,17 @@ const Graph: React.FC = () => {
         document.addEventListener('click', (e) => {
             setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
         })
-        document.addEventListener('scroll', (e) => {
-            setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
-        })
+        // document.addEventListener('scroll', (e) => {
+        //     setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
+        // })
     }, [])
 
     const showDetail = () => {
         navigate(
             '/detail?name=' +
-                tempPoint.pointName +
-                '&id=' +
-                tempPoint.beforePointId
+            tempPoint.pointName +
+            '&id=' +
+            tempPoint.beforePointId
         )
         // window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
     }
