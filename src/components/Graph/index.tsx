@@ -2,7 +2,7 @@
  * @author 陆劲涛
  * @description 知识图谱主页
  */
-import { IResponse, TreeNode } from '@/types'
+import { TreeNode } from '@/types'
 import { request } from '@/utils/request'
 import { Input, message, Modal } from 'antd'
 import ReactECharts from 'echarts-for-react'
@@ -10,10 +10,12 @@ import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
+import { atom, useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
 import './index.less'
+
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
 
 type EChartsOption = echarts.ComposeOption<
@@ -21,11 +23,17 @@ type EChartsOption = echarts.ComposeOption<
 >
 
 export class GraphProps {}
+const contextMenuStyleAtom = atom({
+    top: '',
+    left: '',
+    visibility: 'hidden',
+})
 
 const Graph: React.FC = () => {
-    const [data, setData] = useState<Array<TreeNode>>()
+    const [data, setData] = useState<TreeNode[]>()
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
+
     // 格式化数据，适配echarts
     const formatData = (data: TreeNode) => {
         if (!data) return
@@ -38,12 +46,12 @@ const Graph: React.FC = () => {
         })
     }
     const initData = () => {
-        request({
+        request<TreeNode>({
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
             res.data.path = ''
-            formatData(res.data, '')
+            formatData(res.data)
             setData(res.data.children)
         })
     }
@@ -51,12 +59,13 @@ const Graph: React.FC = () => {
         pointName: '',
         beforePointId: '0',
     })
+
+    //Api相关
     /**
-     * Api相关
+     * 添加节点
      */
-    // 添加结点
     const addNode = () => {
-        request<IResponse>({
+        request({
             url: '/home/addPoint',
             method: 'post',
             data: tempPoint,
@@ -70,8 +79,11 @@ const Graph: React.FC = () => {
             }
         })
     }
+    /**
+     * 删除节点
+     */
     const deleteNode = () => {
-        request<IResponse>({
+        request({
             url: '/home/deletePoint',
             method: 'post',
             data: {
@@ -87,6 +99,7 @@ const Graph: React.FC = () => {
             }
         })
     }
+
     // modal相关
     const [isModalOpen, setIsModalOpen] = useState(false)
     const showModal = () => {
@@ -99,7 +112,7 @@ const Graph: React.FC = () => {
     const handleCancel = () => {
         setIsModalOpen(false)
     }
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         tempPoint.pointName = e.target.value
     }
 
@@ -191,8 +204,8 @@ const Graph: React.FC = () => {
             },
         ],
     }
-    const handleChartReady = (chart) => {
-        chart.on('contextmenu', (params) => {
+    const handleChartReady = (chart: any) => {
+        chart.on('contextmenu', (params: any) => {
             params.event.event.stopPropagation() // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
             setContextMenuStyle({
@@ -207,11 +220,8 @@ const Graph: React.FC = () => {
     }
 
     // 菜单栏style
-    const [contextMenuStyle, setContextMenuStyle] = useState({
-        top: '',
-        left: '',
-        visibility: 'hidden',
-    })
+    const [contextMenuStyle, setContextMenuStyle] =
+        useAtom(contextMenuStyleAtom)
 
     useEffect(() => {
         initData()

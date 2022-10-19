@@ -1,3 +1,6 @@
+/**
+ * 自定义Response泛型
+ */
 export interface IResponse<T = any> {
     code: number
     msg: string
