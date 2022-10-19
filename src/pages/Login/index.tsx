@@ -1,6 +1,6 @@
 import sunrise from '@/assets/sunrise.png'
 import { UserContext } from '@/context'
-import { CustomResponse } from '@/types'
+import { IResponse } from '@/types'
 import { request } from '@/utils/request'
 import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     }, [])
 
     const initCodeImg = () => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/user/verifyCode',
             method: 'get',
             responseType: 'arraybuffer',
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
     }
 
     const onFinish = (values: any) => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/user/proLogin',
             method: 'post',
             data: values,

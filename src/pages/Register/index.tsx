@@ -1,5 +1,5 @@
 import sunrise from '@/assets/sunrise.png'
-import { CustomResponse } from '@/types'
+import { IResponse } from '@/types'
 import { request } from '@/utils/request'
 import {
     LockOutlined,
@@ -22,7 +22,7 @@ const RegisterForm: React.FC = () => {
         initCodeFlag = true
     }, [])
     const initCodeImg = () => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/user/verifyCode',
             method: 'get',
             responseType: 'arraybuffer',
@@ -38,7 +38,7 @@ const RegisterForm: React.FC = () => {
         })
     }
     const onFinish = (values: any) => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/user/proRegister',
             method: 'post',
             params: values,

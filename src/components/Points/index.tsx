@@ -2,7 +2,8 @@
  * @author 高远
  * @description 知识卡片
  */
-import { CustomResponse, GraphPoint } from '@/types'
+import { GraphPoint, IResponse } from '@/types'
+import { request } from '@/utils/request'
 import {
     EditOutlined,
     EllipsisOutlined,
@@ -12,7 +13,6 @@ import { Avatar, Button, Card, Input, message, Modal } from 'antd'
 import Meta from 'antd/lib/card/Meta'
 import React, { useState } from 'react'
 import './index.less'
-import { request } from '@/utils/request'
 export interface PointProps {
     data: GraphPoint[]
     getNextPointList: (pointId: string, pointName: string) => void
@@ -43,7 +43,7 @@ const Point: React.FC<PointProps> = (props) => {
     }
 
     const addNode = () => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/home/addPoint',
             method: 'post',
             data: {

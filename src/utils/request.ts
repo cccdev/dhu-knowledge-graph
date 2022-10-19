@@ -1,4 +1,4 @@
-import { CustomResponse } from '@/types'
+import { IResponse } from '@/types'
 import axios, { AxiosRequestConfig } from 'axios'
 
 const instance = axios.create({
@@ -8,8 +8,8 @@ const instance = axios.create({
 
 export const request = async <T>(
     config: AxiosRequestConfig
-): Promise<CustomResponse<T>> => {
-    const { data } = await instance.request<CustomResponse<T>>(config)
+): Promise<IResponse<T>> => {
+    const { data } = await instance.request<IResponse<T>>(config)
     data.code === 0
         ? console.log(data?.msg) // 成功消息提示
         : console.error(data?.msg) // 失败消息提示

@@ -2,19 +2,16 @@
  * @author 陆劲涛
  * @description 知识图谱主页
  */
-import { kgData } from '@/data/graph'
-import useChart from '@/hooks/useChart'
-import { CustomResponse, GraphPoint, TreeNode } from '@/types'
-import { point2TreeNode } from '@/utils'
+import { IResponse, TreeNode } from '@/types'
 import { request } from '@/utils/request'
-import { Button, Input, message, Modal } from 'antd'
+import { Input, message, Modal } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import React, { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
 import './index.less'
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
@@ -23,11 +20,11 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps { }
+export class GraphProps {}
 
 const Graph: React.FC = () => {
     const [data, setData] = useState<Array<TreeNode>>()
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
     // 格式化数据，适配echarts
     const formatData = (data: TreeNode) => {
@@ -59,7 +56,7 @@ const Graph: React.FC = () => {
      */
     // 添加结点
     const addNode = () => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/home/addPoint',
             method: 'post',
             data: tempPoint,
@@ -74,11 +71,11 @@ const Graph: React.FC = () => {
         })
     }
     const deleteNode = () => {
-        request<CustomResponse>({
+        request<IResponse>({
             url: '/home/deletePoint',
             method: 'post',
             data: {
-                pointId: tempPoint.beforePointId
+                pointId: tempPoint.beforePointId,
             },
         }).then((res) => {
             if (res.code === 0) {
@@ -155,7 +152,7 @@ const Graph: React.FC = () => {
     }
     const option: EChartsOption = {
         toolbox: {
-            show: true
+            show: true,
         },
         title: {
             text: 'DHU-专业实习',
@@ -167,7 +164,7 @@ const Graph: React.FC = () => {
             trigger: 'item',
             triggerOn: 'mousemove',
             formatter: (params, ticket, callback) => params.data.path,
-            extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
+            extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },
         series: [
             {
@@ -188,18 +185,18 @@ const Graph: React.FC = () => {
                     borderColor: '#fff',
                 },
                 levels: getLevelOption(),
-                data
+                data,
             },
         ],
     }
     const handleChartReady = (chart) => {
         chart.on('contextmenu', (params) => {
-            params.event.event.stopPropagation(); // 阻止冒泡
+            params.event.event.stopPropagation() // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
             setContextMenuStyle({
                 left: params.event.event.clientX + 'px',
                 top: params.event.event.clientY + 'px',
-                visibility: 'visible'
+                visibility: 'visible',
             })
             tempPoint.pointName = params.data.point.pointName
             tempPoint.beforePointId = params.data.point.pointId
@@ -211,17 +208,26 @@ const Graph: React.FC = () => {
     const [contextMenuStyle, setContextMenuStyle] = useState({
         top: '',
         left: '',
-        visibility: 'hidden'
+        visibility: 'hidden',
     })
 
     useEffect(() => {
-        initData();
-        document.addEventListener('click', (e) => { setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' }) });
-        document.addEventListener('scroll', (e) => { setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' }) });
+        initData()
+        document.addEventListener('click', (e) => {
+            setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
+        })
+        document.addEventListener('scroll', (e) => {
+            setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
+        })
     }, [])
 
     const showDetail = () => {
-        navigate('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
+        navigate(
+            '/detail?name=' +
+                tempPoint.pointName +
+                '&id=' +
+                tempPoint.beforePointId
+        )
         // window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
     }
     return (
@@ -248,7 +254,12 @@ const Graph: React.FC = () => {
             >
                 <p>{'确定删除【' + modalTitle + '】结点？'}</p>
             </Modal>
-            <ContextMenu style={contextMenuStyle} showModal={showModal} showDeleteModal={showDeleteModal} showDetail={showDetail}></ContextMenu>
+            <ContextMenu
+                style={contextMenuStyle}
+                showModal={showModal}
+                showDeleteModal={showDeleteModal}
+                showDetail={showDetail}
+            ></ContextMenu>
         </>
     )
 }
