@@ -154,9 +154,10 @@ const Graph: React.FC = () => {
         ]
     }
     const option: EChartsOption = {
-        toolbox: {
-            show: true
-        },
+        // toolbox: {
+        //     show: true
+        // },
+        visibleMin: 300,
         title: {
             text: 'DHU-专业实习',
             subtext: '2022/10',
@@ -166,7 +167,8 @@ const Graph: React.FC = () => {
             show: true,
             trigger: 'item',
             triggerOn: 'mousemove',
-            formatter: (params, ticket, callback) => params.data.path,
+            // formatter: (params, ticket, callback) => params.data.path,
+            formatter: '{b}',
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);'
         },
         series: [
