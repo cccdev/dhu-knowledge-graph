@@ -36,7 +36,7 @@ const Detail: React.FC = (props) => {
             },
         }).then((res) => {
             if (res.code === 0) {
-                message.success(res.msg)
+                // message.success(res.msg)
                 // console.log(res.data)
                 setData(res.data)
             } else {
@@ -54,15 +54,15 @@ const Detail: React.FC = (props) => {
     const inputRef = useRef<InputRef>(null);
     const editInputRef = useRef<InputRef>(null);
 
-    useEffect(() => {
-        if (inputVisible) {
-            inputRef.current?.focus();
-        }
-    }, [inputVisible]);
+    // useEffect(() => {
+    //     if (inputVisible) {
+    //         inputRef.current?.focus();
+    //     }
+    // }, [inputVisible]);
 
-    useEffect(() => {
-        editInputRef.current?.focus();
-    }, [inputValue]);
+    // useEffect(() => {
+    //     editInputRef.current?.focus();
+    // }, [inputValue]);
 
     const handleClose = (removedTag: string) => {
         const newTags = tags.filter(tag => tag !== removedTag);

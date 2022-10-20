@@ -4,17 +4,20 @@
  */
 import { TreeNode } from '@/types'
 import { request } from '@/utils/request'
-import { Input, message, Modal } from 'antd'
+import { SyncOutlined } from '@ant-design/icons'
+import { Button, Input, message, Modal, Tooltip } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { atom, useAtom } from 'jotai'
+import { treeTypeAtom } from '@/App'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
 import './index.less'
+import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
 
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
 
@@ -30,33 +33,23 @@ export const contextMenuStyleAtom = atom({
 })
 
 const Graph: React.FC = () => {
-    const [data, setData] = useState<TreeNode[]>()
+    const [data, setData] = useState<TreeNode[]>([])
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
     const [tempPoint] = useState({
         pointName: '',
         beforePointId: '0',
     })
+    const [treeType, setTreeType] = useAtom(treeTypeAtom);
 
     // 格式化数据，适配echarts
-    const formatData = (data: TreeNode) => {
-        if (!data) return
-        data.name = data.point.pointName
-        data.value = data.count
-        data.children.forEach((e) => {
-            e.point.beforePointId = data.point?.pointId
-            e.path = data.path + '/' + e.point.pointName
-            formatData(e)
-        })
-    }
     const initData = () => {
         request<TreeNode>({
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
-            res.data.path = ''
-            formatData(res.data)
-            setData(res.data.children)
+            // res.data.point.pointName = '知识图谱'
+            setData([point2TreeNode(res.data, treeType)])
         })
     }
 
@@ -164,9 +157,6 @@ const Graph: React.FC = () => {
         ]
     }
     const option: EChartsOption = {
-        // toolbox: {
-        //     show: true
-        // },
         visibleMin: 300,
         title: {
             text: 'DHU-专业实习',
@@ -181,28 +171,7 @@ const Graph: React.FC = () => {
             formatter: '{b}',
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },
-        series: [
-            {
-                name: '',
-                type: 'treemap',
-                drillDownIcon: '▶',
-                leafDepth: 3,
-                squareRatio: 1,
-                label: {
-                    show: true,
-                    formatter: '{b}',
-                },
-                upperLabel: {
-                    show: true,
-                    height: 30,
-                },
-                itemStyle: {
-                    borderColor: '#fff',
-                },
-                levels: getLevelOption(),
-                data,
-            },
-        ],
+        series: treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data)
     }
     const handleChartReady = (chart: any) => {
         chart.on('contextmenu', (params: any) => {
@@ -229,11 +198,16 @@ const Graph: React.FC = () => {
         document.addEventListener('click', (e) => {
             setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
         })
-        // document.addEventListener('scroll', (e) => {
-        //     setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
-        // })
+
     }, [])
 
+    // 改变树的形态
+    const transformTree = () => {
+        const type = treeType === 'tree' ? 'treemap' : 'tree';
+        localStorage.setItem('treeType', type);
+        setTreeType(type);
+    }
+    // 到详情页
     const showDetail = () => {
         navigate(
             '/detail?name=' +
@@ -247,7 +221,7 @@ const Graph: React.FC = () => {
         <>
             <ReactECharts
                 option={option}
-                style={{ height: '80vh', width: '100%' }}
+                style={{ height: '90vh', width: '100%' }}
                 onChartReady={handleChartReady}
             />
             <Modal
@@ -272,6 +246,10 @@ const Graph: React.FC = () => {
                 showDeleteModal={showDeleteModal}
                 showDetail={showDetail}
             ></ContextMenu>
+            <Tooltip title="切换形态" className='transformBtn'>
+                <Button onClick={transformTree} shape="circle" size='large' icon={<SyncOutlined />} />
+            </Tooltip>
+
         </>
     )
 }

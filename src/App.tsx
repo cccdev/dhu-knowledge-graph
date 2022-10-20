@@ -6,6 +6,10 @@ import { Footer } from 'antd/lib/layout/layout'
 import React from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routes'
+import { atom } from "jotai";
+
+export const userDataAtom = atom(JSON.parse(localStorage.getItem('userData') || '{"isLoggedIn": false, "mobile": ""}'));
+export const treeTypeAtom = atom(localStorage.getItem('treeType') || 'tree'); // tree || treemap
 
 const App: React.FC = () => {
     return (

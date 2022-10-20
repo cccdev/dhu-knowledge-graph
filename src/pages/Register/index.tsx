@@ -1,3 +1,4 @@
+import { userDataAtom } from '@/App'
 import sunrise from '@/assets/sunrise.png'
 import { IResponse } from '@/types'
 import { request } from '@/utils/request'
@@ -8,6 +9,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
+import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
@@ -15,9 +17,14 @@ import './index.less'
 const RegisterForm: React.FC = () => {
     const [codeImg, setCodeImg] = useState('')
     const navigate = useNavigate()
+    const [userData, setUserData] = useAtom(userDataAtom)
 
     let initCodeFlag = false
     useEffect(() => {
+        if (userData.isLoggedIn) {
+            navigate('/')
+            return
+        }
         if (!initCodeFlag) initCodeImg()
         initCodeFlag = true
     }, [])
@@ -29,11 +36,11 @@ const RegisterForm: React.FC = () => {
         }).then((res) => {
             setCodeImg(
                 'data:image/png;base64,' +
-                    btoa(
-                        String.fromCharCode(
-                            ...new Uint8Array(res as unknown as ArrayBufferLike)
-                        )
+                btoa(
+                    String.fromCharCode(
+                        ...new Uint8Array(res as unknown as ArrayBufferLike)
                     )
+                )
             )
         })
     }
