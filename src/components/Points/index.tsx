@@ -38,7 +38,7 @@ const Point: React.FC<PointProps> = (props) => {
     }
 
     let pointName = ''
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         pointName = e.target.value
     }
 

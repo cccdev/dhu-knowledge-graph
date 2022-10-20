@@ -171,8 +171,8 @@ const Detail: React.FC = (props) => {
                         </div>
                         <h3>类型：{data?.content}</h3>
                         <h3 style={{ display: 'inline' }}>难度：</h3>
-                        <Rate value={data?.degree} count={3}></Rate>
-                        <span style={{ margin: '0 10px' }}>{rateDesc[data.degree - 1]}</span>
+                        <Rate value={Number(data?.degree)} count={3}></Rate>
+                        <span style={{ margin: '0 10px' }}>{rateDesc[Number(data.degree) - 1]}</span>
                         <embed src={data?.addressId} style={{ marginTop: '20px' }} />
                     </div>
                 ) : (

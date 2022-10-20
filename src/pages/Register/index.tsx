@@ -41,7 +41,7 @@ const RegisterForm: React.FC = () => {
         request<IResponse>({
             url: '/user/proRegister',
             method: 'post',
-            params: values,
+            data: values,
         }).then((res) => {
             if (res.code === 0) {
                 message.success(res.msg)

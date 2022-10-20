@@ -15,7 +15,7 @@ import { NavLink } from 'react-router-dom'
 import DarkToggle from '../DarkToggle'
 import './index.less'
 
-export class TopHeaderProps {}
+export class TopHeaderProps { }
 const items: MenuProps['items'] = [
     {
         label: '登录',
