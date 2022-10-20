@@ -12,7 +12,7 @@ import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { atom, useAtom } from 'jotai'
-import { treeTypeAtom } from '@/App'
+import { treeTypeAtom, userDataAtom } from '@/App'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
@@ -41,7 +41,17 @@ const Graph: React.FC = () => {
         beforePointId: '0',
     })
     const [treeType, setTreeType] = useAtom(treeTypeAtom);
-
+    const [userData, setUserdata] = useAtom(userDataAtom);
+    const logOut = () => {
+        setUserdata({
+            idLoggedIn: false,
+            mobile: ''
+        })
+        localStorage.setItem('userData', JSON.stringify({
+            idLoggedIn: false,
+            mobile: ''
+        }))
+    }
     // 格式化数据，适配echarts
     const initData = () => {
         request<TreeNode>({
@@ -49,7 +59,10 @@ const Graph: React.FC = () => {
             params: { pointId: 0 },
         }).then((res) => {
             // res.data.point.pointName = '知识图谱'
-            setData([point2TreeNode(res.data, treeType)])
+            if (res.code === 0)
+                setData([point2TreeNode(res.data, treeType)])
+            else
+                logOut()
         })
     }
 
