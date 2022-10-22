@@ -55,9 +55,10 @@ const Login: React.FC = () => {
                     JSON.stringify({
                         isLoggedIn: true,
                         mobile: values.mobile,
+                        userName: res.data
                     })
                 )
-                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile })
+                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile, userName: res.data })
                 navigate('/')
             } else {
                 initCodeImg()

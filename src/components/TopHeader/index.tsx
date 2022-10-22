@@ -97,7 +97,7 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                 <span style={{ marginRight: '15px' }}>
                     {
                         userData?.isLoggedIn
-                            ? '欢迎回来，' + userData.mobile
+                            ? '欢迎回来，' + userData.userName
                             : '请先登录'
                     }
                 </span>
