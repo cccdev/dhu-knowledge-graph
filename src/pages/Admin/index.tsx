@@ -75,7 +75,6 @@ export default function ErrorPage() {
       url: '/user/getAllUser',
     }).then(res => {
       if (res.code === 0) {
-        // console.log(res)
         setUserList(res.data)
       } else {
         message.error(res.msg)
@@ -89,16 +88,19 @@ export default function ErrorPage() {
       dataIndex: 'userName',
       key: 'userName',
       render: text => <a>{text}</a>,
+      align: 'center'
     },
     {
       title: '手机号',
       dataIndex: 'id',
       key: 'id',
+      align: 'center'
     },
     {
       title: '身份',
       key: 'admin',
       dataIndex: 'admin',
+      align: 'center',
       render: (_, { admin }) => (
         <Tag color={admin ? 'geekblue' : 'green'}>
           {admin ? '管理员' : '用户'}
@@ -108,6 +110,7 @@ export default function ErrorPage() {
     {
       title: '操作',
       key: 'delete',
+      align: 'center',
       render: (user) => (
         <Space size="middle">
           {
