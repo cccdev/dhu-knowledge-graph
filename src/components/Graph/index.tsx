@@ -59,7 +59,7 @@ const Graph: React.FC = () => {
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
-            // res.data.point.pointName = '知识图谱'
+            res.data.point.pointName = '知识图谱'
             if (res.code === 0)
                 setData([point2TreeNode(res.data, treeType)])
             else
