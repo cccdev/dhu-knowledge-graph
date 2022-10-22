@@ -29,7 +29,7 @@ export const getTreeSeries = data => [
             position: 'left',
             verticalAlign: 'middle',
             align: 'right',
-            fontSize: 14
+            fontSize: 15,
         },
         leaves: {
             label: {

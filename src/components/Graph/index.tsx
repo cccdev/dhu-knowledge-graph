@@ -12,7 +12,7 @@ import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { atom, useAtom } from 'jotai'
-import { treeTypeAtom, userDataAtom } from '@/App'
+import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
@@ -42,6 +42,7 @@ const Graph: React.FC = () => {
     })
     const [treeType, setTreeType] = useAtom(treeTypeAtom);
     const [userData, setUserdata] = useAtom(userDataAtom);
+    const [dark] = useAtom(darkModeAtom)
     const logOut = () => {
         setUserdata({
             idLoggedIn: false,
@@ -175,7 +176,7 @@ const Graph: React.FC = () => {
         title: {
             text: 'DHU-专业实习',
             subtext: '2022/10',
-            left: 'center',
+            left: 'left',
         },
         tooltip: {
             show: true,
@@ -185,7 +186,8 @@ const Graph: React.FC = () => {
             formatter: '{b}',
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },
-        series: treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data)
+        series: treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data),
+        darkMode: dark
     }
     const handleChartReady = (chart: any) => {
         chart.on('contextmenu', (params: any) => {

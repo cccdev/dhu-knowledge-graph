@@ -10,7 +10,7 @@ import { atom } from "jotai";
 
 export const userDataAtom = atom(JSON.parse(localStorage.getItem('userData') || '{"isLoggedIn": false, "mobile": ""}'));
 export const treeTypeAtom = atom(localStorage.getItem('treeType') || 'tree'); // tree || treemap
-
+export const darkModeAtom = atom(JSON.parse(localStorage.getItem('dark') || 'true'))
 const App: React.FC = () => {
     return (
         <div className="App">
