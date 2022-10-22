@@ -1,6 +1,6 @@
 import TopHeader from '@/components/TopHeader'
 import { request } from '@/utils/request'
-import { Layout, message } from 'antd'
+import { Layout, message, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import { Space, Table, Tag } from 'antd';
@@ -24,6 +24,11 @@ interface UserType {
 export default function ErrorPage() {
   const [userList, setUserList] = useState([]);
   const [userData] = useAtom(userDataAtom);
+  const [tempUser, setTempUser] = useState({
+    userName: '',
+    id: '',
+    admin: 0
+  })
   const navigate = useNavigate();
 
   const setAdmin = (user: UserType) => {
@@ -31,6 +36,9 @@ export default function ErrorPage() {
       url: '/home/addAdmin',
       method: 'post',
       data: {
+        mobile: user.id
+      },
+      params: {
         mobile: user.id
       }
     }).then(res => {
@@ -48,6 +56,9 @@ export default function ErrorPage() {
       method: 'post',
       data: {
         mobile: user.id
+      },
+      params: {
+        mobile: user.id
       }
     }).then(res => {
       if (res.code === 0) {
@@ -59,6 +70,19 @@ export default function ErrorPage() {
       }
     })
   }
+  const getAllUser = () => {
+    request({
+      url: '/user/getAllUser',
+    }).then(res => {
+      if (res.code === 0) {
+        // console.log(res)
+        setUserList(res.data)
+      } else {
+        message.error(res.msg)
+      }
+    })
+  }
+
   const columns: ColumnsType<DataType> = [
     {
       title: '用户名',
@@ -87,25 +111,42 @@ export default function ErrorPage() {
       render: (user) => (
         <Space size="middle">
           {
-            !user.admin
-              ? <a style={{ cursor: 'pointer' }} onClick={(e) => { setAdmin(user) }}>设为管理</a>
-              : <a style={{ cursor: 'pointer' }} onClick={(e) => { deleteUser(user) }}>删除</a>
+            !user.admin && (<a style={{ cursor: 'pointer' }} onClick={(e) => {
+              setTempUser(user);
+              showModal();
+            }}>设为管理</a>)
           }
+          <a style={{ cursor: 'pointer' }} onClick={(e) => {
+            setTempUser(user);
+            showDeleteModal();
+          }}>删除</a>
         </Space>
       ),
     }
   ];
-  const getAllUser = () => {
-    request({
-      url: '/user/getAllUser',
-    }).then(res => {
-      if (res.code === 0) {
-        // console.log(res)
-        setUserList(res.data)
-      } else {
-        message.error(res.msg)
-      }
-    })
+  // modal相关
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+  const handleOk = () => {
+    setAdmin(tempUser);
+    setIsModalOpen(false)
+  }
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const showDeleteModal = () => {
+    setIsDeleteModalOpen(true)
+  }
+  const handleDeleteOk = () => {
+    deleteUser(tempUser)
+    setIsDeleteModalOpen(false)
+  }
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false)
   }
 
   useEffect(() => {
@@ -119,6 +160,22 @@ export default function ErrorPage() {
     <Layout className="layout">
       <TopHeader />
       <Table style={{ padding: '10px' }} columns={columns} dataSource={userList} />
+      <Modal
+        title={'删除用户'}
+        open={isDeleteModalOpen}
+        onOk={handleDeleteOk}
+        onCancel={handleDeleteCancel}
+      >
+        <p>{'确定删除' + tempUser.userName + '？'}</p>
+      </Modal>
+      <Modal
+        title={'添加'}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>{'确定将' + tempUser.userName + '设置为管理员？'}</p>
+      </Modal>
     </Layout>
 
   )
