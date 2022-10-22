@@ -13,7 +13,7 @@ import { Avatar, Dropdown, Menu, MenuProps } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import { useAtom } from 'jotai'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import DarkToggle from '../DarkToggle'
 import './index.less'
 
@@ -33,6 +33,7 @@ const items: MenuProps['items'] = [
 
 const TopHeader: React.FC<TopHeaderProps> = (props) => {
     const [userData, setUserData] = useAtom(userDataAtom)
+    const navigate = useNavigate();
     const logOut = () => {
         setUserData({
             idLoggedIn: false,
@@ -42,22 +43,24 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
             idLoggedIn: false,
             mobile: ''
         }))
+        navigate('/login')
     }
     const controlMenu = (
         <Menu
             items={[
-                // {
-                //     key: '1',
-                //     label: (
-                //         <a
-                //             target="_blank"
-                //             rel="noopener noreferrer"
-                //             href="https://www.antgroup.com"
-                //         >
-                //             超级管理员
-                //         </a>
-                //     ),
-                // },
+                {
+                    key: '1',
+                    label: (
+                        <NavLink
+                            to="/admin"
+                            className={({ isActive }) =>
+                                isActive ? 'current' : ''
+                            }
+                        >
+                            管理员
+                        </NavLink>
+                    ),
+                },
                 !userData.isLoggedIn
                     ? {
                         key: '2',

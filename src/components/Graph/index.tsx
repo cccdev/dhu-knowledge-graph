@@ -51,6 +51,7 @@ const Graph: React.FC = () => {
             idLoggedIn: false,
             mobile: ''
         }))
+        navigate('/login')
     }
     // 格式化数据，适配echarts
     const initData = () => {

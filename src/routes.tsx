@@ -3,8 +3,9 @@ import ErrorPage from '@/pages/ErrorPage'
 import Home from '@/pages/Home'
 import Detail from '@/pages/Detail'
 import Login from '@/pages/Login'
+import Admin from '@/pages/Admin'
 import Register from '@/pages/Register'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 export const router = createBrowserRouter([
     {
@@ -23,5 +24,9 @@ export const router = createBrowserRouter([
     {
         path: '/detail',
         element: <Detail />,
+    },
+    {
+        path: '/admin',
+        element: <Admin />,
     },
 ])
