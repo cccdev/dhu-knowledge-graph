@@ -3,9 +3,9 @@ import { PointDetail } from '@/types'
 import { request } from '@/utils/request'
 import { Input, InputRef, Layout, message, Select, Tag, Tooltip, UploadFile, UploadProps } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import './index.less'
-import { InboxOutlined, PlusOutlined } from '@ant-design/icons';
+import { InboxOutlined, PlusOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Button, Form, Rate, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload'
 
@@ -25,6 +25,7 @@ const normFile = (e: any) => {
 // 难度等级描述
 const rateDesc = ['初级', '中级', '高级'];
 const Detail: React.FC = (props) => {
+    const navigate = useNavigate();
     const [params] = useSearchParams()
     const [pointId] = useState(params.getAll('id')[0])
     const [data, setData] = useState<PointDetail | null>(null)
@@ -155,6 +156,7 @@ const Detail: React.FC = (props) => {
     return (
         <>
             <Layout className="layout">
+                <Button onClick={() => { navigate(-1) }} id='back-btn' type="primary" shape="circle" icon={<RollbackOutlined />} />
                 <TopHeader />
                 {data ? (
                     <div id="detail">
