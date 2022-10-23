@@ -3,11 +3,13 @@ import { PointDetail } from '@/types'
 import { request } from '@/utils/request'
 import { Input, InputRef, Layout, message, Select, Tag, Tooltip, UploadFile, UploadProps } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './index.less'
 import { DownloadOutlined, FullscreenOutlined, InboxOutlined, PlusOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Button, Form, Rate, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload'
+import { useAtom } from 'jotai'
+import { userDataAtom } from '@/App'
 
 const formItemLayout = {
     labelCol: { span: 6 },
@@ -15,7 +17,6 @@ const formItemLayout = {
 };
 
 const normFile = (e: any) => {
-    // console.log('Upload event:', e);
     if (Array.isArray(e)) {
         return e;
     }
@@ -46,6 +47,14 @@ const Detail: React.FC = (props) => {
             }
         })
     }
+
+    const [userData] = useAtom(userDataAtom)
+    useEffect(() => {
+        if (!userData.isLoggedIn) {
+            navigate('/login')
+            return
+        }
+    }, [])
 
     // tag相关
     const [tags, setTags] = useState<string[]>([]);
