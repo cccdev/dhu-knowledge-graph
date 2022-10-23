@@ -229,13 +229,13 @@ const Graph: React.FC = () => {
     }
     // 到详情页
     const showDetail = () => {
-        navigate(
-            '/detail?name=' +
-            tempPoint.pointName +
-            '&id=' +
-            tempPoint.beforePointId
-        )
-        // window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
+        // navigate(
+        //     '/detail?name=' +
+        //     tempPoint.pointName +
+        //     '&id=' +
+        //     tempPoint.beforePointId
+        // )
+        window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
     }
     return (
         <>

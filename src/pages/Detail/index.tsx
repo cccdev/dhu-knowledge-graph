@@ -161,7 +161,7 @@ const Detail: React.FC = (props) => {
     return (
         <>
             <Layout className="layout">
-                <Button onClick={() => { navigate(-1) }} id='back-btn' size="large" shape="circle" icon={<RollbackOutlined />} />
+                {/* <Button onClick={() => { navigate(-1) }} id='back-btn' size="large" shape="circle" icon={<RollbackOutlined />} /> */}
                 <TopHeader />
                 {data ? (
                     <div id="detail">
