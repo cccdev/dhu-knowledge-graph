@@ -112,7 +112,6 @@ export default function ErrorPage() {
       align: 'center',
       render: (_, user) => (
         <Switch checked={user.admin === 1} onChange={() => {
-          console.log(_, user)
           setTempUser(user);
           showModal();
         }} />

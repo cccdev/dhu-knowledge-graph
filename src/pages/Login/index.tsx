@@ -49,7 +49,6 @@ const Login: React.FC = () => {
             data: values,
         }).then((res) => {
             if (res.code === 0) {
-                console.log(res)
                 message.success(res.msg)
                 localStorage.setItem(
                     'userData',

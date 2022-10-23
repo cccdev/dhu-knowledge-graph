@@ -5,7 +5,7 @@ import { Input, InputRef, Layout, message, Select, Tag, Tooltip, UploadFile, Upl
 import React, { useEffect, useRef, useState } from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import './index.less'
-import { InboxOutlined, PlusOutlined, RollbackOutlined } from '@ant-design/icons';
+import { DownloadOutlined, FullscreenOutlined, InboxOutlined, PlusOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Button, Form, Rate, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload'
 
@@ -29,6 +29,7 @@ const Detail: React.FC = (props) => {
     const [params] = useSearchParams()
     const [pointId] = useState(params.getAll('id')[0])
     const [data, setData] = useState<PointDetail | null>(null)
+    const fileRef = useRef();
     const initData = () => {
         request<PointDetail | null>({
             url: '/home/detail',
@@ -54,16 +55,6 @@ const Detail: React.FC = (props) => {
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef<InputRef>(null);
     const editInputRef = useRef<InputRef>(null);
-
-    // useEffect(() => {
-    //     if (inputVisible) {
-    //         inputRef.current?.focus();
-    //     }
-    // }, [inputVisible]);
-
-    // useEffect(() => {
-    //     editInputRef.current?.focus();
-    // }, [inputValue]);
 
     const handleClose = (removedTag: string) => {
         const newTags = tags.filter(tag => tag !== removedTag);
@@ -150,6 +141,20 @@ const Detail: React.FC = (props) => {
 
         upload(formData)
     };
+    const download = () => {
+        request({
+            url: '/oss/getDownloadUrl',
+            params: {
+                fileUrl: data?.addressId
+            }
+        }).then(res => {
+            if (res.code === 0) {
+                window.open(res.data)
+            } else {
+                message.error(res.msg)
+            }
+        })
+    }
     useEffect(() => {
         initData()
     }, [])
@@ -175,7 +180,19 @@ const Detail: React.FC = (props) => {
                         <h3 style={{ display: 'inline' }}>难度：</h3>
                         <Rate disabled value={Number(data?.degree)} count={3}></Rate>
                         <span style={{ margin: '0 10px' }}>{rateDesc[Number(data.degree) - 1]}</span>
-                        <embed src={data?.addressId} style={{ marginTop: '20px' }} />
+                        <Button className='file-btn' onClick={download} icon={<DownloadOutlined />}>
+                            下载
+                        </Button>
+                        <Button className='file-btn' onClick={() => {
+                            try {
+                                fileRef.current.requestFullscreen()
+                            } catch {
+                                message.error('操作失败')
+                            }
+                        }} icon={<FullscreenOutlined />}>
+                            全屏
+                        </Button>
+                        <embed ref={fileRef} src={data?.addressId} style={{ marginTop: '20px' }} />
                     </div>
                 ) : (
                     <div className="no-detail">
@@ -300,8 +317,9 @@ const Detail: React.FC = (props) => {
                             </Form>
                         </div>
                     </div>
-                )}
-            </Layout>
+                )
+                }
+            </Layout >
         </>
     )
 }
