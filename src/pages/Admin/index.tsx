@@ -1,6 +1,6 @@
 import TopHeader from '@/components/TopHeader'
 import { request } from '@/utils/request'
-import { Layout, message, Modal } from 'antd'
+import { Layout, message, Modal, Switch } from 'antd'
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import { Space, Table, Tag } from 'antd';
@@ -12,8 +12,8 @@ import { useNavigate } from 'react-router-dom'
 interface DataType {
   key: string;
   userName: string;
-  mobile: number;
-  admin: boolean;
+  id: string;
+  admin: number;
 }
 interface UserType {
   id: string;
@@ -27,7 +27,7 @@ export default function ErrorPage() {
   const [tempUser, setTempUser] = useState({
     userName: '',
     id: '',
-    admin: 0
+    admin: 0,
   })
   const navigate = useNavigate();
 
@@ -36,11 +36,9 @@ export default function ErrorPage() {
       url: '/home/addAdmin',
       method: 'post',
       data: {
-        mobile: user.id
+        mobile: user.id,
+        admin: user.admin ? '0' : '1'
       },
-      params: {
-        mobile: user.id
-      }
     }).then(res => {
       if (res.code === 0) {
         message.success(res.msg)
@@ -63,7 +61,6 @@ export default function ErrorPage() {
     }).then(res => {
       if (res.code === 0) {
         message.success(res.msg)
-        user.admin = 1;
         getAllUser()
       } else {
         message.error(res.msg)
@@ -75,6 +72,7 @@ export default function ErrorPage() {
       url: '/user/getAllUser',
     }).then(res => {
       if (res.code === 0) {
+        res.data.forEach(e => e.key = e.id);
         setUserList(res.data)
       } else {
         message.error(res.msg)
@@ -102,24 +100,31 @@ export default function ErrorPage() {
       dataIndex: 'admin',
       align: 'center',
       render: (_, { admin }) => (
-        <Tag color={admin ? 'geekblue' : 'green'}>
+        <Tag color={admin ? 'red' : 'green'}>
           {admin ? '管理员' : '用户'}
         </Tag>
       ),
     },
     {
+      title: '管理权限',
+      key: 'admin',
+      dataIndex: 'admin',
+      align: 'center',
+      render: (_, user) => (
+        <Switch checked={user.admin === 1} onChange={() => {
+          console.log(_, user)
+          setTempUser(user);
+          showModal();
+        }} />
+      )
+    },
+    {
       title: '操作',
       key: 'delete',
       align: 'center',
-      render: (user) => (
+      render: (_, user) => (
         <Space size="middle">
-          {
-            !user.admin && (<a style={{ cursor: 'pointer' }} onClick={(e) => {
-              setTempUser(user);
-              showModal();
-            }}>设为管理</a>)
-          }
-          <a style={{ cursor: 'pointer' }} onClick={(e) => {
+          <a style={{ cursor: 'pointer' }} onClick={() => {
             setTempUser(user);
             showDeleteModal();
           }}>删除</a>
@@ -177,7 +182,11 @@ export default function ErrorPage() {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <p>{'确定将' + tempUser.userName + '设置为管理员？'}</p>
+        <p>{
+          !tempUser.admin
+            ? '确定将' + tempUser.userName + '设置为管理员？'
+            : '确定移除' + tempUser.userName + '管理员权限？'
+        }</p>
       </Modal>
     </Layout>
 

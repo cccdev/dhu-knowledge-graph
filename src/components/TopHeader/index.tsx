@@ -45,51 +45,54 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
         }))
         navigate('/login')
     }
+    const menuItems = [
+        !userData.isLoggedIn
+            ? {
+                key: '2',
+                label: (
+                    <NavLink
+                        to="/login"
+                        className={({ isActive }) =>
+                            isActive ? 'current' : ''
+                        }
+                    >
+                        登录
+                    </NavLink>
+                ),
+            }
+            : {
+                key: '4',
+                label: (
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={logOut}
+                    >
+                        退出
+                    </a>
+                ),
+                danger: true,
+                theme: 'light',
+            },
+    ]
+    if (userData.admin) {
+        menuItems.unshift({
+            key: '1',
+            label: (
+                <NavLink
+                    to="/admin"
+                    className={({ isActive }) =>
+                        isActive ? 'current' : ''
+                    }
+                >
+                    管理员
+                </NavLink>
+            ),
+        })
+    }
     const controlMenu = (
         <Menu
-            items={[
-                {
-                    key: '1',
-                    label: (
-                        <NavLink
-                            to="/admin"
-                            className={({ isActive }) =>
-                                isActive ? 'current' : ''
-                            }
-                        >
-                            管理员
-                        </NavLink>
-                    ),
-                },
-                !userData.isLoggedIn
-                    ? {
-                        key: '2',
-                        label: (
-                            <NavLink
-                                to="/login"
-                                className={({ isActive }) =>
-                                    isActive ? 'current' : ''
-                                }
-                            >
-                                登录
-                            </NavLink>
-                        ),
-                    }
-                    : {
-                        key: '4',
-                        label: (
-                            <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={logOut}
-                            >
-                                退出
-                            </a>
-                        ),
-                        danger: true,
-                        theme: 'light',
-                    },
-            ]}
+            items={menuItems}
         />
     )
 

@@ -49,16 +49,17 @@ const Login: React.FC = () => {
             data: values,
         }).then((res) => {
             if (res.code === 0) {
+                console.log(res)
                 message.success(res.msg)
                 localStorage.setItem(
                     'userData',
                     JSON.stringify({
                         isLoggedIn: true,
                         mobile: values.mobile,
-                        userName: res.data
+                        ...res.data
                     })
                 )
-                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile, userName: res.data })
+                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile, ...res.data })
                 navigate('/')
             } else {
                 initCodeImg()

@@ -60,11 +60,15 @@ const Graph: React.FC = () => {
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
-            res.data.point.pointName = '知识图谱'
-            if (res.code === 0)
+            if (res.code === 0) {
+                res.data.point.pointName = '知识图谱'
                 setData([point2TreeNode(res.data, treeType)])
-            else
-                logOut()
+            } else {
+                message.error(res.msg)
+                if (res.code === 500502) {
+                    logOut()
+                }
+            }
         })
     }
 
