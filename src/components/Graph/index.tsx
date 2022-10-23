@@ -251,7 +251,7 @@ const Graph: React.FC = () => {
                 onCancel={handleCancel}
             >
                 <p>{'在【' + modalTitle + '】下添加结点'}</p>
-                <Input placeholder="请输入知识点名称" onChange={handleChange} />
+                <Input placeholder="请输入知识点名称" onChange={handleChange} onPressEnter={handleOk} />
             </Modal>
             <Modal
                 title={'删除'}
