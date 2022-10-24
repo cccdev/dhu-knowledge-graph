@@ -1,22 +1,29 @@
 import { GraphPoint, TreeNode } from '@/types'
 
-export const point2TreeNode = (data: GraphPoint[], type: string): TreeNode => {
-    const obj = {};
+export const point2TreeNode = (
+    data: GraphPoint,
+    type: string
+): TreeNode | undefined => {
+    const obj = {} as TreeNode
     if (!data) return
     obj.name = data.point.pointName
     obj.value = data.count
     obj.children = data.children
-    obj.point = data.point;
-    for (let i = 0; i < obj.children.length; i++) {
-        let e = obj.children[i];
-        e.point.beforePointId = obj.point?.pointId
-        e.path = obj.path + '/' + e.point.pointName
-        obj.children[i] = point2TreeNode(e, type);
+    obj.point = data.point
+
+    if (obj.children) {
+        for (let i = 0; i < obj.children.length; i++) {
+            const e = obj.children[i]
+            e.point ? (e.point.beforePointId = obj.point?.pointId) : e
+            e.path = obj.path + '/' + e.point.pointName
+            obj.children[i] = point2TreeNode(e, type)
+        }
     }
-    return obj;
+
+    return obj
 }
 
-export const getTreeSeries = data => [
+export const getTreeSeries = (data) => [
     {
         type: 'tree',
         data,
@@ -35,18 +42,18 @@ export const getTreeSeries = data => [
             label: {
                 position: 'right',
                 verticalAlign: 'middle',
-                align: 'left'
-            }
+                align: 'left',
+            },
         },
         emphasis: {
-            focus: 'descendant'
+            focus: 'descendant',
         },
         expandAndCollapse: true,
         animationDuration: 550,
-        animationDurationUpdate: 750
-    }
+        animationDurationUpdate: 750,
+    },
 ]
-export const getTreeMapSeries = data => [
+export const getTreeMapSeries = (data) => [
     {
         name: '',
         type: 'treemap',
@@ -97,5 +104,5 @@ export const getTreeMapSeries = data => [
                 },
             },
         ],
-    }
+    },
 ]

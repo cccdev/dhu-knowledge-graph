@@ -2,7 +2,9 @@
  * @author 陆劲涛
  * @description 知识图谱主页
  */
+import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
 import { TreeNode } from '@/types'
+import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
 import { request } from '@/utils/request'
 import { SyncOutlined } from '@ant-design/icons'
 import { Button, Input, message, Modal, Tooltip } from 'antd'
@@ -12,12 +14,10 @@ import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import { atom, useAtom } from 'jotai'
-import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
 import './index.less'
-import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
 
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
 
@@ -25,7 +25,7 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps { }
+export class GraphProps {}
 export const contextMenuStyleAtom = atom({
     top: '',
     left: '',
@@ -40,18 +40,21 @@ const Graph: React.FC = () => {
         pointName: '',
         beforePointId: '0',
     })
-    const [treeType, setTreeType] = useAtom(treeTypeAtom);
-    const [userData, setUserdata] = useAtom(userDataAtom);
+    const [treeType, setTreeType] = useAtom(treeTypeAtom)
+    const [userData, setUserdata] = useAtom(userDataAtom)
     const [dark] = useAtom(darkModeAtom)
     const logOut = () => {
         setUserdata({
             idLoggedIn: false,
-            mobile: ''
+            mobile: '',
         })
-        localStorage.setItem('userData', JSON.stringify({
-            idLoggedIn: false,
-            mobile: ''
-        }))
+        localStorage.setItem(
+            'userData',
+            JSON.stringify({
+                idLoggedIn: false,
+                mobile: '',
+            })
+        )
         navigate('/login')
     }
     // 格式化数据，适配echarts
@@ -190,12 +193,13 @@ const Graph: React.FC = () => {
             formatter: '{b}',
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },
-        series: treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data),
-        darkMode: dark
+        series:
+            treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data),
+        darkMode: dark,
     }
     const handleChartReady = (chart: any) => {
         chart.on('contextmenu', (params: any) => {
-            if (params.name === undefined) return;
+            if (params.name === undefined) return
             params.event.event.stopPropagation() // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
             setContextMenuStyle({
@@ -218,14 +222,13 @@ const Graph: React.FC = () => {
         document.addEventListener('click', (e) => {
             setContextMenuStyle({ ...contextMenuStyle, visibility: 'hidden' })
         })
-
     }, [])
 
     // 改变树的形态
     const transformTree = () => {
-        const type = treeType === 'tree' ? 'treemap' : 'tree';
-        localStorage.setItem('treeType', type);
-        setTreeType(type);
+        const type = treeType === 'tree' ? 'treemap' : 'tree'
+        localStorage.setItem('treeType', type)
+        setTreeType(type)
     }
     // 到详情页
     const showDetail = () => {
@@ -235,7 +238,12 @@ const Graph: React.FC = () => {
         //     '&id=' +
         //     tempPoint.beforePointId
         // )
-        window.open('/detail?name=' + tempPoint.pointName + '&id=' + tempPoint.beforePointId)
+        window.open(
+            '/detail?name=' +
+                tempPoint.pointName +
+                '&id=' +
+                tempPoint.beforePointId
+        )
     }
     return (
         <>
@@ -251,7 +259,11 @@ const Graph: React.FC = () => {
                 onCancel={handleCancel}
             >
                 <p>{'在【' + modalTitle + '】下添加结点'}</p>
-                <Input placeholder="请输入知识点名称" onChange={handleChange} onPressEnter={handleOk} />
+                <Input
+                    placeholder="请输入知识点名称"
+                    onChange={handleChange}
+                    onPressEnter={handleOk}
+                />
             </Modal>
             <Modal
                 title={'删除'}
@@ -266,10 +278,14 @@ const Graph: React.FC = () => {
                 showDeleteModal={showDeleteModal}
                 showDetail={showDetail}
             ></ContextMenu>
-            <Tooltip title="切换形态" className='transformBtn'>
-                <Button onClick={transformTree} shape="circle" size='large' icon={<SyncOutlined />} />
+            <Tooltip title="切换形态" className="transformBtn">
+                <Button
+                    onClick={transformTree}
+                    shape="circle"
+                    size="large"
+                    icon={<SyncOutlined />}
+                />
             </Tooltip>
-
         </>
     )
 }
