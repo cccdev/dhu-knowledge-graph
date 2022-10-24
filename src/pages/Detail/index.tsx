@@ -118,6 +118,7 @@ const Detail: React.FC = (props) => {
     // 手动上传文件
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [uploading, setUploading] = useState(false);
+    const [progressValue, setProgressValue] = useState(0);
     const fileUploadProps: UploadProps = {
         onRemove: file => {
             const index = fileList.indexOf(file);
@@ -126,6 +127,19 @@ const Detail: React.FC = (props) => {
             setFileList(newFileList);
         },
         beforeUpload: file => {
+            // 限制50M
+            if (file.size > 50 * 1024 * 1024) {
+                message.warn('文件大小不能超过50M')
+                return Upload.LIST_IGNORE;
+            }
+            const fileTypeArr = file.name.split('.');
+            const fileType = fileTypeArr[fileTypeArr.length - 1].toLowerCase();
+            // 限制格式
+            if (!['pdf', 'png', 'jpg', 'gif', 'jpeg', 'mp4', 'wav'].includes(fileType)) {
+                message.warn('不支持.' + fileType + '格式的文件')
+                setFileList([])
+                return Upload.LIST_IGNORE;
+            }
             setFileList([file]);
             return false;
         },
@@ -138,17 +152,25 @@ const Detail: React.FC = (props) => {
             url: '/oss/upload',
             method: 'post',
             data,
+            timeout: 1000,
             headers: {
                 'Content-Type': 'multipart/form-data'
-            }
+            },
+            onUploadProgress: (e: ProgressEvent) => {
+                console.log(progressValue)
+                setProgressValue(~~((e.loaded / e.total) * 100));
+            },
         }).then(res => {
             message.success(res.msg)
             if (res.code === 0) {
                 initData();
             }
-        }).finally(() => {
-            setUploading(false);
-        });
+        }).catch(res => {
+            message.error('上传超时（60s）')
+        })
+            .finally(() => {
+                setUploading(false);
+            });
     }
     const onFinish = (values: any) => {
         if (fileList.length === 0) {
@@ -217,7 +239,7 @@ const Detail: React.FC = (props) => {
                         }} icon={<FullscreenOutlined />}>
                             全屏
                         </Button>
-                        <embed ref={fileRef} src={data?.addressId} style={{ marginTop: '20px' }} />
+                        <embed allowfullscreen ref={fileRef} src={data?.addressId} style={{ marginTop: '20px' }} />
                     </div>
                 ) : (
                     <div className="no-detail">
@@ -329,14 +351,21 @@ const Detail: React.FC = (props) => {
                                                 <InboxOutlined />
                                             </p>
                                             <p className="ant-upload-text">点击或拖拽至此进行上传</p>
-                                            <p className="ant-upload-hint">支持doc,pdf,mp4,jpg,png等格式</p>
+                                            <p className="ant-upload-hint">仅支持pdf, png, jpg, gif, jpeg, mp4, wav格式</p>
                                         </Upload.Dragger>
                                     </Form.Item>
                                 </Form.Item>
 
                                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                                    <Button type="primary" htmlType="submit" disabled={uploading}>
-                                        {uploading ? '上传中' : '提交'}
+                                    <Button id='upload-btn' type="primary" htmlType="submit" disabled={uploading}>
+                                        {
+                                            uploading
+                                                ? (
+                                                    progressValue < 100
+                                                        ? '上传中' + progressValue + '%'
+                                                        : '上传完毕，处理中')
+                                                : '提交'
+                                        }
                                     </Button>
                                 </Form.Item>
                             </Form>
@@ -344,7 +373,7 @@ const Detail: React.FC = (props) => {
                     </div>
                 )
                 }
-                <Comments data={commentsData}></Comments>
+                {/* <Comments data={commentsData}></Comments> */}
             </Layout >
         </>
     )
