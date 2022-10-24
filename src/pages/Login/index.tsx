@@ -33,11 +33,11 @@ const Login: React.FC = () => {
         }).then((res) => {
             setCodeImg(
                 'data:image/png;base64,' +
-                btoa(
-                    String.fromCharCode(
-                        ...new Uint8Array(res as unknown as ArrayBufferLike)
+                    btoa(
+                        String.fromCharCode(
+                            ...new Uint8Array(res as unknown as ArrayBufferLike)
+                        )
                     )
-                )
             )
         })
     }
@@ -55,10 +55,15 @@ const Login: React.FC = () => {
                     JSON.stringify({
                         isLoggedIn: true,
                         mobile: values.mobile,
-                        ...res.data
+                        ...res.data,
                     })
                 )
-                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile, ...res.data })
+                setUserData({
+                    ...userData,
+                    isLoggedIn: true,
+                    mobile: values.mobile,
+                    ...res.data,
+                })
                 navigate('/')
             } else {
                 initCodeImg()

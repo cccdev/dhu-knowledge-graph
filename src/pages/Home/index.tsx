@@ -10,7 +10,7 @@ import './index.less'
 
 const Home: React.FC = () => {
     const [userData] = useAtom(userDataAtom)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     useEffect(() => {
         if (!userData.isLoggedIn) {
             navigate('/login')
@@ -22,9 +22,7 @@ const Home: React.FC = () => {
             <Layout className="layout">
                 <TopHeader />
                 {/* <MidContent /> */}
-                {
-                    userData.isLoggedIn && (<Graph></Graph>)
-                }
+                {userData.isLoggedIn && <Graph></Graph>}
             </Layout>
         </>
     )
