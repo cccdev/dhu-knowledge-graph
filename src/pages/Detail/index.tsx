@@ -10,6 +10,7 @@ import { Button, Form, Rate, Upload } from 'antd';
 import { RcFile } from 'antd/lib/upload'
 import { useAtom } from 'jotai'
 import { userDataAtom } from '@/App'
+import Comments from '@/components/Comments'
 
 const formItemLayout = {
     labelCol: { span: 6 },
@@ -47,7 +48,22 @@ const Detail: React.FC = (props) => {
             }
         })
     }
-
+    // const initComments = () => {
+    //     request({
+    //         url: '/comment/detail',
+    //         params: {
+    //             pointId,
+    //         },
+    //     }).then((res) => {
+    //         if (res.code === 0) {
+    //             // message.success(res.msg)
+    //             // console.log(res.data)
+    //             setData(res.data)
+    //         } else {
+    //             // message.error(res.msg);
+    //         }
+    //     })
+    // }
     const [userData] = useAtom(userDataAtom)
     useEffect(() => {
         if (!userData.isLoggedIn) {
@@ -328,6 +344,7 @@ const Detail: React.FC = (props) => {
                     </div>
                 )
                 }
+                <Comments data={commentsData}></Comments>
             </Layout >
         </>
     )
