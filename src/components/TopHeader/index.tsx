@@ -4,7 +4,6 @@
  */
 import { userDataAtom } from '@/App'
 import {
-    DownOutlined,
     LoginOutlined,
     LogoutOutlined,
     QuestionCircleOutlined,
@@ -136,8 +135,15 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                     }
                 </span>
                 <Dropdown overlay={controlMenu}>
-                    <Avatar size="large" icon={<UserOutlined />}>
-                        <DownOutlined />
+                    <Avatar
+                        size="large"
+                        style={{
+                            backgroundColor: 'orange',
+                            verticalAlign: 'middle'
+                        }}
+                        icon={userData.isLoggedIn ? '' : <UserOutlined />}
+                    >
+                        {userData.userName.substring(0, 1).toUpperCase()}
                     </Avatar>
                 </Dropdown>
             </div>

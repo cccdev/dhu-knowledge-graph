@@ -152,7 +152,7 @@ const Detail: React.FC = (props) => {
             url: '/oss/upload',
             method: 'post',
             data,
-            timeout: 1000,
+            timeout: 60000,
             headers: {
                 'Content-Type': 'multipart/form-data'
             },
