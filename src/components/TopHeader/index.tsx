@@ -143,7 +143,7 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                         }}
                         icon={userData.isLoggedIn ? '' : <UserOutlined />}
                     >
-                        {userData.userName.substring(0, 1).toUpperCase()}
+                        {userData.isLoggedIn && userData.userName.substring(0, 1).toUpperCase()}
                     </Avatar>
                 </Dropdown>
             </div>
