@@ -5,7 +5,18 @@
     align-items: center;
     background-color: white;
     padding-left: 15px;
-
+    .left {
+        display: flex;
+        align-items: center;
+        .anticon-question-circle {
+            cursor: pointer;
+            font-size: 25px;
+            transition: 0.3s;
+            &:hover {
+                transform: rotate(180deg);
+            }
+        }
+    }
     .welcome {
         float: right;
         padding-right: 20px;
@@ -13,6 +24,9 @@
     .ant-avatar {
         cursor: pointer;
     }
+}
+.indent {
+    text-indent: 2em;
 }
 a {
     cursor: pointer;

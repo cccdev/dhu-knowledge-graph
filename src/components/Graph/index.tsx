@@ -36,10 +36,11 @@ const Graph: React.FC = () => {
     const [data, setData] = useState<TreeNode[]>([])
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
-    const [tempPoint] = useState({
+    const [tempPoint, setTempPoint] = useState({
         pointName: '',
         beforePointId: '0',
     })
+    const [inputValue, setInputValue] = useState('')
     const [treeType, setTreeType] = useAtom(treeTypeAtom)
     const [userData, setUserdata] = useAtom(userDataAtom)
     const [dark] = useAtom(darkModeAtom)
@@ -80,18 +81,29 @@ const Graph: React.FC = () => {
      * 添加节点
      */
     const addNode = () => {
-        request({
-            url: '/home/addPoint',
-            method: 'post',
-            data: tempPoint,
-        }).then((res) => {
-            if (res.code === 0) {
-                message.success(res.msg)
-                tempPoint.pointName = ''
-                initData()
-            } else {
-                message.error(res.msg)
-            }
+        const reqs = inputValue
+            .split(' ')
+            .filter((e) => e !== '')
+            .map((e) =>
+                request({
+                    url: '/home/addPoint',
+                    method: 'post',
+                    data: {
+                        beforePointId: tempPoint.beforePointId,
+                        pointName: e,
+                    },
+                })
+            )
+        Promise.all(reqs).then((res) => {
+            res.forEach((e) => {
+                if (e.code === 0) {
+                    message.success(e.msg)
+                } else {
+                    message.error(e.msg)
+                }
+            })
+            setInputValue('')
+            initData()
         })
     }
     /**
@@ -128,7 +140,7 @@ const Graph: React.FC = () => {
         setIsModalOpen(false)
     }
     const handleChange = (e: any) => {
-        tempPoint.pointName = e.target.value
+        setInputValue(e.target.value)
     }
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -207,8 +219,10 @@ const Graph: React.FC = () => {
                 top: params.event.event.clientY + 'px',
                 visibility: 'visible',
             })
-            tempPoint.pointName = params.data.point.pointName
-            tempPoint.beforePointId = params.data.point.pointId
+            setTempPoint({
+                pointName: params.data.point.pointName,
+                beforePointId: params.data.point.pointId,
+            })
             setModalTitle(params.data.point.pointName)
         })
     }
@@ -260,9 +274,11 @@ const Graph: React.FC = () => {
             >
                 <p>{'在【' + modalTitle + '】下添加结点'}</p>
                 <Input
-                    placeholder="请输入知识点名称"
+                    value={inputValue}
+                    placeholder="请输入知识点名称（多个结点以空格分开）"
                     onChange={handleChange}
                     onPressEnter={handleOk}
+                    allowClear
                 />
             </Modal>
             <Modal

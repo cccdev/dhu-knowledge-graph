@@ -32,6 +32,7 @@ export const getTreeSeries = (data) => [
         bottom: '1%',
         right: '20%',
         symbolSize: 14,
+        initialTreeDepth: 2,
         label: {
             position: 'left',
             verticalAlign: 'middle',
@@ -59,7 +60,7 @@ export const getTreeMapSeries = (data) => [
         type: 'treemap',
         data: data[0]?.children,
         drillDownIcon: '▶',
-        leafDepth: 3,
+        leafDepth: 4,
         squareRatio: 1,
         label: {
             show: true,
