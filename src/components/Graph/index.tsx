@@ -30,7 +30,7 @@ export const contextMenuStyleAtom = atom({
     top: '',
     left: '',
     visibility: 'hidden',
-})
+} as any)
 
 const Graph: React.FC = () => {
     const [data, setData] = useState<TreeNode[]>([])
