@@ -36,11 +36,11 @@ const RegisterForm: React.FC = () => {
         }).then((res) => {
             setCodeImg(
                 'data:image/png;base64,' +
-                btoa(
-                    String.fromCharCode(
-                        ...new Uint8Array(res as unknown as ArrayBufferLike)
+                    btoa(
+                        String.fromCharCode(
+                            ...new Uint8Array(res as unknown as ArrayBufferLike)
+                        )
                     )
-                )
             )
         })
     }

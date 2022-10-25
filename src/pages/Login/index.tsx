@@ -1,12 +1,11 @@
 import { userDataAtom } from '@/App'
 import sunrise from '@/assets/sunrise.png'
-import { UserContext } from '@/context'
 import { IResponse } from '@/types'
 import { request } from '@/utils/request'
 import { LockOutlined, MobileOutlined, SafetyOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import { useAtom } from 'jotai'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import './index.less'
 
@@ -33,11 +32,11 @@ const Login: React.FC = () => {
         }).then((res) => {
             setCodeImg(
                 'data:image/png;base64,' +
-                btoa(
-                    String.fromCharCode(
-                        ...new Uint8Array(res as unknown as ArrayBufferLike)
+                    btoa(
+                        String.fromCharCode(
+                            ...new Uint8Array(res as unknown as ArrayBufferLike)
+                        )
                     )
-                )
             )
         })
     }
@@ -55,10 +54,15 @@ const Login: React.FC = () => {
                     JSON.stringify({
                         isLoggedIn: true,
                         mobile: values.mobile,
-                        ...res.data
+                        ...res.data,
                     })
                 )
-                setUserData({ ...userData, isLoggedIn: true, mobile: values.mobile, ...res.data })
+                setUserData({
+                    ...userData,
+                    isLoggedIn: true,
+                    mobile: values.mobile,
+                    ...res.data,
+                })
                 navigate('/')
             } else {
                 initCodeImg()

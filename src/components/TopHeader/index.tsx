@@ -3,6 +3,7 @@
  * @description 导航栏
  */
 import { userDataAtom } from '@/App'
+import homeIcon from '@/assets/favicon.svg'
 import {
     LoginOutlined,
     LogoutOutlined,
@@ -17,7 +18,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import DarkToggle from '../DarkToggle'
 import './index.less'
 
-export class TopHeaderProps { }
+export class TopHeaderProps {}
 const items: MenuProps['items'] = [
     {
         label: '登录',
@@ -33,47 +34,50 @@ const items: MenuProps['items'] = [
 
 const TopHeader: React.FC<TopHeaderProps> = (props) => {
     const [userData, setUserData] = useAtom(userDataAtom)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const logOut = () => {
         setUserData({
             idLoggedIn: false,
-            mobile: ''
+            mobile: '',
         })
-        localStorage.setItem('userData', JSON.stringify({
-            idLoggedIn: false,
-            mobile: ''
-        }))
+        localStorage.setItem(
+            'userData',
+            JSON.stringify({
+                idLoggedIn: false,
+                mobile: '',
+            })
+        )
         navigate('/login')
     }
     const menuItems = [
         !userData.isLoggedIn
             ? {
-                key: '2',
-                label: (
-                    <NavLink
-                        to="/login"
-                        className={({ isActive }) =>
-                            isActive ? 'current' : ''
-                        }
-                    >
-                        登录
-                    </NavLink>
-                ),
-            }
+                  key: '2',
+                  label: (
+                      <NavLink
+                          to="/login"
+                          className={({ isActive }) =>
+                              isActive ? 'current' : ''
+                          }
+                      >
+                          登录
+                      </NavLink>
+                  ),
+              }
             : {
-                key: '4',
-                label: (
-                    <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={logOut}
-                    >
-                        退出
-                    </a>
-                ),
-                danger: true,
-                theme: 'light',
-            },
+                  key: '4',
+                  label: (
+                      <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={logOut}
+                      >
+                          退出
+                      </a>
+                  ),
+                  danger: true,
+                  theme: 'light',
+              },
     ]
     if (userData.admin) {
         menuItems.unshift({
@@ -81,65 +85,70 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
             label: (
                 <NavLink
                     to="/admin"
-                    className={({ isActive }) =>
-                        isActive ? 'current' : ''
-                    }
+                    className={({ isActive }) => (isActive ? 'current' : '')}
                 >
                     管理员
                 </NavLink>
             ),
         })
     }
-    const controlMenu = (
-        <Menu
-            items={menuItems}
-        />
-    )
+    const controlMenu = <Menu items={menuItems} />
     const info = () => {
         Modal.info({
             title: '说明',
             content: (
                 <div style={{ marginLeft: '-30px', marginTop: '20px' }}>
                     <Tag color="#108ee9">简介</Tag>
-                    <p style={{ marginTop: '10px' }} className='indent'>该知识图谱系统由东华大学19级计科专业实习团队研发，如您遇到任何问题，可以在<a href="http://dhu.asea.fun">交流论坛</a>中进行讨论。
+                    <p style={{ marginTop: '10px' }} className="indent">
+                        该知识图谱系统由东华大学19级计科专业实习团队研发，如您遇到任何问题，可以在
+                        <a href="http://dhu.asea.fun">交流论坛</a>中进行讨论。
                     </p>
-                    <p className='indent'>
+                    <p className="indent">
                         注意，该系统和论坛的账号是各自独立的。
                     </p>
                     <Tag color="#f50">使用说明</Tag>
                     <ol style={{ marginTop: '10px', marginLeft: '-10px' }}>
-                        <li>在任意结点点击右键，可以添加、删除结点以及查看详情。</li>
-                        <li>增删节点需要管理员权限，可以在<a href="http://dhu.asea.fun">交流论坛</a>提出申请。</li>
-                        <li>添加节点时，可以一次性添加多个结点，用空格分开。</li>
+                        <li>
+                            在任意结点点击右键，可以添加、删除结点以及查看详情。
+                        </li>
+                        <li>
+                            增删节点需要管理员权限，可以在
+                            <a href="http://dhu.asea.fun">交流论坛</a>提出申请。
+                        </li>
+                        <li>
+                            添加节点时，可以一次性添加多个结点，用空格分开。
+                        </li>
                         <li>上传文件时注意文件类型，大小不能超过50M。</li>
                         <li>点击右下角可以切换知识图谱形态。</li>
                         <li>点击左上角可以切换主题模式。</li>
                     </ol>
                 </div>
-
-            )
-        });
-    };
+            ),
+        })
+    }
     return (
         <Header className="top-header">
             <span className="left">
+                <img
+                    src={homeIcon}
+                    alt="首页icon"
+                    style={{ width: '2.5em', height: '2.5em' }}
+                />
                 <DarkToggle />
                 <QuestionCircleOutlined onClick={info} />
             </span>
             <div className="welcome">
                 <span style={{ marginRight: '15px' }}>
-                    {
-                        userData?.isLoggedIn
-                            ? '欢迎回来，' + userData.userName
-                            : '请先登录'
-                    }
+                    {userData?.isLoggedIn
+                        ? '欢迎回来，' + userData.userName
+                        : '请先登录'}
                 </span>
                 <Dropdown overlay={controlMenu}>
                     <Avatar
                         size="large"
                         style={{
                             backgroundColor: 'orange',
-                            verticalAlign: 'middle'
+                            verticalAlign: 'middle',
                         }}
                         icon={userData.isLoggedIn ? '' : <UserOutlined />}
                     >
@@ -147,7 +156,6 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                     </Avatar>
                 </Dropdown>
             </div>
-
         </Header>
     )
 }
