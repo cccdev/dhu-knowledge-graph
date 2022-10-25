@@ -2,7 +2,22 @@ import { Comment, List, Tooltip } from 'antd'
 import React from 'react'
 import './index.less'
 
-const data = [
+/**
+ * 单个评论
+ */
+type Comment = {
+    actions: JSX.Element[]
+    author: string
+    avatar: string
+    content: JSX.Element
+    datetime: JSX.Element
+}
+
+interface CommentsProps {
+    comments: Comment[]
+}
+
+const comments: Comment[] = [
     {
         actions: [<span key="comment-list-reply-to-0">Reply to</span>],
         author: 'Han Solo',
@@ -39,14 +54,14 @@ const data = [
     },
 ]
 
-const Comments: React.FC = (props) => {
-    const { data } = props
+const Comments: React.FC<CommentsProps> = (props) => {
+    const { comments } = props
     return (
         <List
             className="comment-list"
-            header={`${data.length} replies`}
+            header={`${comments.length} replies`}
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={comments}
             renderItem={(item) => (
                 <li>
                     <Comment

@@ -48,7 +48,7 @@ const Detail: React.FC = (props) => {
     const [params] = useSearchParams()
     const [pointId] = useState(params.getAll('id')[0])
     const [data, setData] = useState<PointDetail | null>(null)
-    const fileRef = useRef()
+    const fileRef = useRef<HTMLEmbedElement | null>(null)
     const initData = () => {
         request<PointDetail | null>({
             url: '/home/detail',
@@ -177,9 +177,17 @@ const Detail: React.FC = (props) => {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-            onUploadProgress: (e: ProgressEvent) => {
+            // // onUploadProgress: (e: ProgressEvent) => {
+            //     console.log(progressValue)
+            //     setProgressValue(~~((e.loaded / e.total) * 100))
+            // // },
+            onUploadProgress: (progressEvent) => {
                 console.log(progressValue)
-                setProgressValue(~~((e.loaded / e.total) * 100))
+                if (progressEvent.total) {
+                    setProgressValue(
+                        ~~((progressEvent.loaded / progressEvent.total) * 100)
+                    )
+                }
             },
         })
             .then((res) => {
@@ -212,7 +220,7 @@ const Detail: React.FC = (props) => {
         upload(formData)
     }
     const download = () => {
-        request({
+        request<string | URL | undefined>({
             url: '/oss/getDownloadUrl',
             params: {
                 fileUrl: data?.addressId,
@@ -267,7 +275,9 @@ const Detail: React.FC = (props) => {
                             className="file-btn"
                             onClick={() => {
                                 try {
-                                    fileRef.current.requestFullscreen()
+                                    if (fileRef.current) {
+                                        fileRef.current.requestFullscreen()
+                                    }
                                 } catch {
                                     message.error('操作失败')
                                 }

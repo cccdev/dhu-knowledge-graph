@@ -1,28 +1,23 @@
+import { userDataAtom } from '@/App'
 import TopHeader from '@/components/TopHeader'
 import { request } from '@/utils/request'
-import { Layout, message, Modal, Switch } from 'antd'
-import React, { useEffect, useState } from 'react'
-import './index.less'
-import { Space, Table, Tag } from 'antd'
+import { Layout, message, Modal, Space, Switch, Table, Tag } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { useAtom } from 'jotai'
-import { userDataAtom } from '@/App'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import './index.less'
 
-interface DataType {
+interface Admin {
     key: string
     userName: string
     id: string
     admin: number
 }
-interface UserType {
-    id: string
-    userName: string
-    admin: number
-}
+type User = Omit<Admin, 'key'>
 
 export default function ErrorPage() {
-    const [userList, setUserList] = useState([])
+    const [userList, setUserList] = useState<Admin[]>([])
     const [userData] = useAtom(userDataAtom)
     const [tempUser, setTempUser] = useState({
         userName: '',
@@ -31,7 +26,7 @@ export default function ErrorPage() {
     })
     const navigate = useNavigate()
 
-    const setAdmin = (user: UserType) => {
+    const setAdmin = (user: User) => {
         request({
             url: '/home/addAdmin',
             method: 'post',
@@ -48,7 +43,7 @@ export default function ErrorPage() {
             }
         })
     }
-    const deleteUser = (user: UserType) => {
+    const deleteUser = (user: User) => {
         request({
             url: '/user/deleteUser',
             method: 'post',
@@ -68,11 +63,11 @@ export default function ErrorPage() {
         })
     }
     const getAllUser = () => {
-        request({
+        request<Admin[]>({
             url: '/user/getAllUser',
         }).then((res) => {
             if (res.code === 0) {
-                res.data.forEach((e) => (e.key = e.id))
+                res.data.forEach((e: any) => (e.key = e.id))
                 setUserList(res.data)
             } else {
                 message.error(res.msg)
@@ -80,7 +75,7 @@ export default function ErrorPage() {
         })
     }
 
-    const columns: ColumnsType<DataType> = [
+    const columns: ColumnsType<Admin> = [
         {
             title: '用户名',
             dataIndex: 'userName',

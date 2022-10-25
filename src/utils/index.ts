@@ -1,4 +1,5 @@
 import { GraphPoint, TreeNode } from '@/types'
+import { TreemapSeriesOption } from 'echarts/charts'
 
 export const point2TreeNode = (
     data: GraphPoint,
@@ -23,7 +24,7 @@ export const point2TreeNode = (
     return obj
 }
 
-export const getTreeSeries = (data) => [
+export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
     {
         type: 'tree',
         data,
@@ -54,7 +55,8 @@ export const getTreeSeries = (data) => [
         animationDurationUpdate: 750,
     },
 ]
-export const getTreeMapSeries = (data) => [
+
+export const getTreeMapSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
     {
         name: '',
         type: 'treemap',
