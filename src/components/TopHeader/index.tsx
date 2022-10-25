@@ -3,6 +3,7 @@
  * @description 导航栏
  */
 import { userDataAtom } from '@/App'
+import homeIcon from '@/assets/favicon.svg'
 import {
     LoginOutlined,
     LogoutOutlined,
@@ -128,6 +129,11 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
     return (
         <Header className="top-header">
             <span className="left">
+                <img
+                    src={homeIcon}
+                    alt="首页icon"
+                    style={{ width: '2.5em', height: '2.5em' }}
+                />
                 <DarkToggle />
                 <QuestionCircleOutlined onClick={info} />
             </span>
