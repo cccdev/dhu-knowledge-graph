@@ -24,6 +24,14 @@ export const point2TreeNode = (
     return obj
 }
 
+export const point2GraphNode = (data) => {
+    const res = []
+    data.forEach((e) => {
+        res.push({ id: e.pointId, name: e.pointName })
+    })
+    return res
+}
+
 export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
     {
         type: 'tree',
@@ -34,6 +42,7 @@ export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
         right: '20%',
         symbolSize: 14,
         initialTreeDepth: 2,
+        roam: true,
         label: {
             position: 'left',
             verticalAlign: 'middle',

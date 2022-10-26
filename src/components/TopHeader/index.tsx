@@ -10,15 +10,15 @@ import {
     QuestionCircleOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Dropdown, Menu, MenuProps, Modal, Tag } from 'antd'
+import { Avatar, Dropdown, Input, Menu, MenuProps, Modal, Tag } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import { useAtom } from 'jotai'
-import React from 'react'
+import React, { useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import DarkToggle from '../DarkToggle'
 import './index.less'
 
-export class TopHeaderProps { }
+export class TopHeaderProps {}
 const items: MenuProps['items'] = [
     {
         label: '登录',
@@ -52,32 +52,32 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
     const menuItems = [
         !userData.isLoggedIn
             ? {
-                key: '2',
-                label: (
-                    <NavLink
-                        to="/login"
-                        className={({ isActive }) =>
-                            isActive ? 'current' : ''
-                        }
-                    >
-                        登录
-                    </NavLink>
-                ),
-            }
+                  key: '2',
+                  label: (
+                      <NavLink
+                          to="/login"
+                          className={({ isActive }) =>
+                              isActive ? 'current' : ''
+                          }
+                      >
+                          登录
+                      </NavLink>
+                  ),
+              }
             : {
-                key: '4',
-                label: (
-                    <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={logOut}
-                    >
-                        退出
-                    </a>
-                ),
-                danger: true,
-                theme: 'light',
-            },
+                  key: '4',
+                  label: (
+                      <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={logOut}
+                      >
+                          退出
+                      </a>
+                  ),
+                  danger: true,
+                  theme: 'light',
+              },
     ]
     if (userData.admin) {
         menuItems.unshift({
@@ -126,35 +126,57 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
             ),
         })
     }
+
+    const inputRef = useRef()
+    const toSearch = () => {
+        const input = inputRef.current.input
+        window.open('/search?keyword=' + input.value)
+    }
     return (
         <Header className="top-header">
-            <span className="left">
+            <div className="left">
                 <img
                     src={homeIcon}
                     alt="首页icon"
-                    style={{ width: '2.5em', height: '2.5em' }}
+                    style={{
+                        width: '2.5em',
+                        height: '2.5em',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                        navigate('/')
+                    }}
                 />
                 <DarkToggle />
                 <QuestionCircleOutlined onClick={info} />
-            </span>
-            <div className="welcome">
-                <span style={{ marginRight: '15px' }}>
-                    {userData?.isLoggedIn
-                        ? '欢迎回来，' + userData.userName
-                        : '请先登录'}
-                </span>
-                <Dropdown overlay={controlMenu}>
-                    <Avatar
-                        size="large"
-                        style={{
-                            backgroundColor: 'orange',
-                            verticalAlign: 'middle',
-                        }}
-                        icon={userData.isLoggedIn ? '' : <UserOutlined />}
-                    >
-                        {userData.isLoggedIn && userData.userName.substring(0, 1).toUpperCase()}
-                    </Avatar>
-                </Dropdown>
+            </div>
+            <div className="right">
+                <Input
+                    ref={inputRef}
+                    placeholder="根据节点名称搜索"
+                    maxLength={20}
+                    onPressEnter={toSearch}
+                />
+                <div className="welcome">
+                    <span style={{ marginRight: '15px' }}>
+                        {userData?.isLoggedIn
+                            ? '欢迎回来，' + userData.userName
+                            : '请先登录'}
+                    </span>
+                    <Dropdown overlay={controlMenu}>
+                        <Avatar
+                            size="large"
+                            style={{
+                                backgroundColor: 'orange',
+                                verticalAlign: 'middle',
+                            }}
+                            icon={userData.isLoggedIn ? '' : <UserOutlined />}
+                        >
+                            {userData.isLoggedIn &&
+                                userData.userName.substring(0, 1).toUpperCase()}
+                        </Avatar>
+                    </Dropdown>
+                </div>
             </div>
         </Header>
     )

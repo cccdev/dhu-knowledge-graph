@@ -4,12 +4,17 @@
  */
 import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
 import { TreeNode } from '@/types'
-import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
+import {
+    getTreeMapSeries,
+    getTreeSeries,
+    point2GraphNode,
+    point2TreeNode,
+} from '@/utils'
 import { request } from '@/utils/request'
 import { SyncOutlined } from '@ant-design/icons'
 import { Button, Input, message, Modal, Tooltip } from 'antd'
 import ReactECharts from 'echarts-for-react'
-import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
+import { GraphChart, GraphSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
@@ -17,22 +22,17 @@ import { atom, useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
+import { contextMenuStyleAtom } from '../Graph'
 import './index.less'
 
-echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
+echarts.use([TooltipComponent, GraphChart, CanvasRenderer])
 
 type EChartsOption = echarts.ComposeOption<
-    TooltipComponentOption | TreemapSeriesOption
+    TooltipComponentOption | GraphSeriesOption
 >
 
 export class GraphProps {}
-export const contextMenuStyleAtom = atom({
-    top: '',
-    left: '',
-    visibility: 'hidden',
-} as any)
-
-const Graph: React.FC = () => {
+const Graph: React.FC = (props) => {
     const [data, setData] = useState<TreeNode[]>([])
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
@@ -40,6 +40,7 @@ const Graph: React.FC = () => {
         pointName: '',
         beforePointId: '0',
     })
+    const { keyword } = props
     const [inputValue, setInputValue] = useState('')
     const [treeType, setTreeType] = useAtom(treeTypeAtom)
     const [userData, setUserdata] = useAtom(userDataAtom)
@@ -58,24 +59,132 @@ const Graph: React.FC = () => {
         )
         navigate('/login')
     }
+    // 菜单栏style
+    const [contextMenuStyle, setContextMenuStyle] =
+        useAtom(contextMenuStyleAtom)
+
     // 格式化数据，适配echarts
     const initData = () => {
         request<TreeNode>({
-            url: '/home/getAllChildren',
-            params: { pointId: 0 },
+            url: '/search/point',
+            params: { pointName: keyword },
         }).then((res) => {
             if (res.code === 0) {
-                if (res.data.point) {
-                    res.data.point.pointName = '知识图谱'
-                }
-                setData([point2TreeNode(res.data, treeType)])
+                // console.log(res)
+                setData(point2GraphNode(res.data))
             } else {
                 message.error(res.msg)
-                if (res.code === 500502) {
-                    logOut()
-                }
+                // if (res.code === 500502) {
+                //   logOut()
+                // }
             }
         })
+    }
+
+    // echarts配置
+    function getLevelOption() {
+        return [
+            {
+                itemStyle: {
+                    borderColor: '#777',
+                    borderWidth: 0,
+                    gapWidth: 1,
+                },
+                upperLabel: {
+                    show: false,
+                },
+            },
+            {
+                itemStyle: {
+                    borderColor: '#555',
+                    borderWidth: 5,
+                    gapWidth: 1,
+                },
+                emphasis: {
+                    itemStyle: {
+                        borderColor: '#aaa',
+                    },
+                },
+            },
+            {
+                colorSaturation: [0.35, 0.5],
+                itemStyle: {
+                    borderWidth: 5,
+                    gapWidth: 1,
+                    borderColorSaturation: 0.6,
+                },
+            },
+        ]
+    }
+    const option: EChartsOption = {
+        title: {
+            text: keyword + ' 的搜索结果',
+            subtext: '2022/10',
+            left: 'left',
+        },
+        tooltip: {
+            show: true,
+            trigger: 'item',
+            triggerOn: 'mousemove',
+            formatter: '{b}',
+            extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+        },
+        series: {
+            type: 'graph',
+            layout: 'force',
+            symbolSize: 40,
+            animation: true,
+            data: data,
+            width: '100%',
+            height: '100%',
+            label: {
+                show: true,
+                position: 'right',
+                formatter: '{b}',
+            },
+            labelLayout: {
+                hideOverlap: true,
+            },
+            scaleLimit: {
+                min: 0.4,
+                max: 2,
+            },
+            roam: true,
+            force: {
+                repulsion: 100,
+                edgeLength: 30,
+            },
+            edges: [],
+        },
+        darkMode: dark,
+    }
+    const handleChartReady = (chart: any) => {
+        chart.on('contextmenu', (params: any) => {
+            console.log(params)
+            if (params.name === undefined) return
+            params.event.event.stopPropagation() // 阻止冒泡
+            params.event.event.preventDefault() // 阻止默认右键菜单
+            setContextMenuStyle({
+                left: params.event.event.clientX + 'px',
+                top: params.event.event.clientY + 'px',
+                visibility: 'visible',
+            })
+            setTempPoint({
+                pointName: params.data.name,
+                beforePointId: params.data.id,
+            })
+            setModalTitle(params.data.name)
+        })
+    }
+
+    // 详情页跳转
+    const showDetail = () => {
+        window.open(
+            '/detail?name=' +
+                tempPoint.pointName +
+                '&id=' +
+                tempPoint.beforePointId
+        )
     }
 
     //Api相关
@@ -128,7 +237,6 @@ const Graph: React.FC = () => {
             }
         })
     }
-
     // modal相关
     const [isModalOpen, setIsModalOpen] = useState(false)
     const showModal = () => {
@@ -157,82 +265,6 @@ const Graph: React.FC = () => {
         setIsDeleteModalOpen(false)
     }
 
-    // echarts配置
-    function getLevelOption() {
-        return [
-            {
-                itemStyle: {
-                    borderColor: '#777',
-                    borderWidth: 0,
-                    gapWidth: 1,
-                },
-                upperLabel: {
-                    show: false,
-                },
-            },
-            {
-                itemStyle: {
-                    borderColor: '#555',
-                    borderWidth: 5,
-                    gapWidth: 1,
-                },
-                emphasis: {
-                    itemStyle: {
-                        borderColor: '#aaa',
-                    },
-                },
-            },
-            {
-                colorSaturation: [0.35, 0.5],
-                itemStyle: {
-                    borderWidth: 5,
-                    gapWidth: 1,
-                    borderColorSaturation: 0.6,
-                },
-            },
-        ]
-    }
-    const option: EChartsOption = {
-        visibleMin: 300,
-        title: {
-            text: 'DHU-专业实习',
-            subtext: '2022/10',
-            left: 'left',
-        },
-        tooltip: {
-            show: true,
-            trigger: 'item',
-            triggerOn: 'mousemove',
-            // formatter: (params, ticket, callback) => params.data.path,
-            formatter: '{b}',
-            extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
-        },
-        series:
-            treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data),
-        darkMode: dark,
-    }
-    const handleChartReady = (chart: any) => {
-        chart.on('contextmenu', (params: any) => {
-            if (params.name === undefined) return
-            params.event.event.stopPropagation() // 阻止冒泡
-            params.event.event.preventDefault() // 阻止默认右键菜单
-            setContextMenuStyle({
-                left: params.event.event.clientX + 'px',
-                top: params.event.event.clientY + 'px',
-                visibility: 'visible',
-            })
-            setTempPoint({
-                pointName: params.data.point.pointName,
-                beforePointId: params.data.point.pointId,
-            })
-            setModalTitle(params.data.point.pointName)
-        })
-    }
-
-    // 菜单栏style
-    const [contextMenuStyle, setContextMenuStyle] =
-        useAtom(contextMenuStyleAtom)
-
     useEffect(() => {
         initData()
         const handleClick = () => {
@@ -244,27 +276,6 @@ const Graph: React.FC = () => {
         }
     }, [])
 
-    // 改变树的形态
-    const transformTree = () => {
-        const type = treeType === 'tree' ? 'treemap' : 'tree'
-        localStorage.setItem('treeType', type)
-        setTreeType(type)
-    }
-    // 到详情页
-    const showDetail = () => {
-        // navigate(
-        //     '/detail?name=' +
-        //     tempPoint.pointName +
-        //     '&id=' +
-        //     tempPoint.beforePointId
-        // )
-        window.open(
-            '/detail?name=' +
-                tempPoint.pointName +
-                '&id=' +
-                tempPoint.beforePointId
-        )
-    }
     return (
         <>
             <ReactECharts
@@ -272,6 +283,11 @@ const Graph: React.FC = () => {
                 style={{ height: '90vh', width: '100%' }}
                 onChartReady={handleChartReady}
             />
+            <ContextMenu
+                showModal={showModal}
+                showDeleteModal={showDeleteModal}
+                showDetail={showDetail}
+            ></ContextMenu>
             <Modal
                 title={'添加'}
                 open={isModalOpen}
@@ -295,19 +311,6 @@ const Graph: React.FC = () => {
             >
                 <p>{'确定删除【' + modalTitle + '】结点？'}</p>
             </Modal>
-            <ContextMenu
-                showModal={showModal}
-                showDeleteModal={showDeleteModal}
-                showDetail={showDetail}
-            ></ContextMenu>
-            <Tooltip title="切换形态" className="transformBtn">
-                <Button
-                    onClick={transformTree}
-                    shape="circle"
-                    size="large"
-                    icon={<SyncOutlined />}
-                />
-            </Tooltip>
         </>
     )
 }

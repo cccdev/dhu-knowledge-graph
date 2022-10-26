@@ -1,11 +1,11 @@
 .top-header {
-    height: 7vh;
+    height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    padding-left: 15px;
     .left {
+        height: 100%;
         display: flex;
         align-items: center;
         .anticon-question-circle {
@@ -17,10 +17,23 @@
             }
         }
     }
-    .welcome {
-        float: right;
-        padding-right: 20px;
+    .right {
+        height: 100%;
+        display: flex;
+        width: fit-content;
+        align-items: center;
+        gap: 20px;
+        input {
+            width: 150px;
+            border-radius: 5px;
+        }
+        .welcome {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
     }
+
     .ant-avatar {
         cursor: pointer;
     }
