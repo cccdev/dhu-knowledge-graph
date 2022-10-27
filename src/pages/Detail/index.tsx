@@ -173,7 +173,7 @@ const Detail: React.FC = (props) => {
             url: '/oss/upload',
             method: 'post',
             data,
-            timeout: 60000,
+            timeout: 180000,
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -197,7 +197,7 @@ const Detail: React.FC = (props) => {
                 }
             })
             .catch((res) => {
-                message.error('上传超时（60s）')
+                message.error('上传超时')
             })
             .finally(() => {
                 setUploading(false)
@@ -294,7 +294,7 @@ const Detail: React.FC = (props) => {
                     </div>
                 ) : (
                     <div className="no-detail">
-                        <h1>该结点没有任何信息，请在下方添加信息并提交</h1>
+                        <h1>该结点没有任何信息或正在处理，若未提交过，请在下方添加信息并提交</h1>
                         <div id="upload-form">
                             <Form
                                 name="validate_other"
@@ -465,7 +465,7 @@ const Detail: React.FC = (props) => {
                                         {uploading
                                             ? progressValue < 100
                                                 ? '上传中' + progressValue + '%'
-                                                : '上传完毕，处理中'
+                                                : '上传完毕，后台处理中，当前窗口可以关闭，一分钟后可返回查看'
                                             : '提交'}
                                     </Button>
                                 </Form.Item>
