@@ -390,9 +390,9 @@ const Detail: React.FC = (props) => {
                                                     >
                                                         {isLongTag
                                                             ? `${tag.slice(
-                                                                  0,
-                                                                  20
-                                                              )}...`
+                                                                0,
+                                                                20
+                                                            )}...`
                                                             : tag}
                                                     </span>
                                                 </Tag>
@@ -449,7 +449,7 @@ const Detail: React.FC = (props) => {
                                                 点击或拖拽至此进行上传
                                             </p>
                                             <p className="ant-upload-hint">
-                                                支持doc,pdf,mp4,jpg,png等格式
+                                                仅支持pdf、图片（如：png、jpg）和视频（如：mp4、wav)格式
                                             </p>
                                         </Upload.Dragger>
                                     </Form.Item>

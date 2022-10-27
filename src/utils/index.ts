@@ -36,10 +36,10 @@ export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
     {
         type: 'tree',
         data,
-        top: '1%',
-        left: '7%',
-        bottom: '1%',
-        right: '20%',
+        top: '10%',
+        left: '10%',
+        bottom: '10%',
+        right: '10%',
         symbolSize: 14,
         initialTreeDepth: 2,
         roam: true,
@@ -82,7 +82,7 @@ export const getTreeMapSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
             height: 30,
         },
         itemStyle: {
-            borderColor: '#fff',
+            borderColor: '#666',
         },
         levels: [
             {
