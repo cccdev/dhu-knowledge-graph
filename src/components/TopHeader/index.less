@@ -8,6 +8,7 @@
         height: 100%;
         display: flex;
         align-items: center;
+        gap: 10px;
         .anticon-question-circle {
             cursor: pointer;
             font-size: 25px;
@@ -20,8 +21,8 @@
     .right {
         height: 100%;
         display: flex;
-        width: fit-content;
         align-items: center;
+        justify-content: flex-end;
         gap: 20px;
         input {
             width: 150px;
@@ -33,7 +34,14 @@
             align-items: center;
         }
     }
-
+    @media screen and(max-width: 700px) {
+        .mobile-hidden{
+            display: none;
+        }
+        &{
+            padding: 10px;
+        }
+    }
     .ant-avatar {
         cursor: pointer;
     }
@@ -45,5 +53,5 @@ a {
     cursor: pointer;
 }
 .react-switch {
-    margin: 20px;
+    // margin: 20px;
 }

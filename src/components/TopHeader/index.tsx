@@ -18,7 +18,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import DarkToggle from '../DarkToggle'
 import './index.less'
 
-export class TopHeaderProps {}
+export class TopHeaderProps { }
 const items: MenuProps['items'] = [
     {
         label: '登录',
@@ -52,32 +52,32 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
     const menuItems = [
         !userData.isLoggedIn
             ? {
-                  key: '2',
-                  label: (
-                      <NavLink
-                          to="/login"
-                          className={({ isActive }) =>
-                              isActive ? 'current' : ''
-                          }
-                      >
-                          登录
-                      </NavLink>
-                  ),
-              }
+                key: '2',
+                label: (
+                    <NavLink
+                        to="/login"
+                        className={({ isActive }) =>
+                            isActive ? 'current' : ''
+                        }
+                    >
+                        登录
+                    </NavLink>
+                ),
+            }
             : {
-                  key: '4',
-                  label: (
-                      <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={logOut}
-                      >
-                          退出
-                      </a>
-                  ),
-                  danger: true,
-                  theme: 'light',
-              },
+                key: '4',
+                label: (
+                    <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={logOut}
+                    >
+                        退出
+                    </a>
+                ),
+                danger: true,
+                theme: 'light',
+            },
     ]
     if (userData.admin) {
         menuItems.unshift({
@@ -135,7 +135,7 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
     return (
         <Header className="top-header">
             <div className="left">
-                <img
+                <img className='mobile-hidden'
                     src={homeIcon}
                     alt="首页icon"
                     style={{
@@ -158,7 +158,7 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                     onPressEnter={toSearch}
                 />
                 <div className="welcome">
-                    <span style={{ marginRight: '15px' }}>
+                    <span className='mobile-hidden' style={{ marginRight: '15px' }}>
                         {userData?.isLoggedIn
                             ? '欢迎回来，' + userData.userName
                             : '请先登录'}
