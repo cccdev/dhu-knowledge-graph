@@ -6,8 +6,8 @@ import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
 import { TreeNode } from '@/types'
 import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
 import { request } from '@/utils/request'
-import { SyncOutlined } from '@ant-design/icons'
-import { Button, Input, message, Modal, Tooltip } from 'antd'
+import { SettingOutlined, SyncOutlined } from '@ant-design/icons'
+import { Button, Dropdown, Input, Menu, message, Modal, Tooltip } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
@@ -25,14 +25,14 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | TreemapSeriesOption
 >
 
-export class GraphProps {}
+export class GraphProps { }
 export const contextMenuStyleAtom = atom({
     top: '',
     left: '',
     visibility: 'hidden',
 } as any)
-
 const Graph: React.FC = () => {
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState<TreeNode[]>([])
     const navigate = useNavigate()
     const [modalTitle, setModalTitle] = useState('首页')
@@ -43,6 +43,11 @@ const Graph: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
     const [treeType, setTreeType] = useAtom(treeTypeAtom)
     const [userData, setUserdata] = useAtom(userDataAtom)
+    const [treeOption, setTreeOption] = useState({
+        fold: true,
+        layout: 'orthogonal', // radial
+        edgeShape: 'curve', // polyline
+    })
     const [dark] = useAtom(darkModeAtom)
     const logOut = () => {
         setUserdata({
@@ -68,6 +73,7 @@ const Graph: React.FC = () => {
                 if (res.data.point) {
                     res.data.point.pointName = '知识图谱'
                 }
+                setLoading(false);
                 setData([point2TreeNode(res.data, treeType)])
             } else {
                 message.error(res.msg)
@@ -97,14 +103,13 @@ const Graph: React.FC = () => {
                 })
             )
         Promise.all(reqs).then((res) => {
-            res.forEach((e) => {
-                if (e.code === 0) {
-                    message.success(e.msg)
-                } else {
-                    message.error(e.msg)
-                }
-            })
+            if (res.every(e => e.code === 0)) {
+                message.success('添加成功')
+            } else {
+                message.success('添加失败')
+            }
             setInputValue('')
+            setLoading(true)
             initData()
         })
     }
@@ -122,6 +127,7 @@ const Graph: React.FC = () => {
             if (res.code === 0) {
                 message.success(res.msg)
                 tempPoint.pointName = ''
+                setLoading(true)
                 initData()
             } else {
                 message.error(res.msg)
@@ -208,7 +214,7 @@ const Graph: React.FC = () => {
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },
         series:
-            treeType === 'tree' ? getTreeSeries(data) : getTreeMapSeries(data),
+            treeType === 'tree' ? getTreeSeries(data, treeOption) : getTreeMapSeries(data),
         darkMode: dark,
     }
     const handleChartReady = (chart: any) => {
@@ -260,14 +266,42 @@ const Graph: React.FC = () => {
         // )
         window.open(
             '/detail?name=' +
-                tempPoint.pointName +
-                '&id=' +
-                tempPoint.beforePointId
+            tempPoint.pointName +
+            '&id=' +
+            tempPoint.beforePointId
         )
     }
+
+    // 设置
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '展开',
+                    label: (
+                        <a onClick={() => {
+                            setTreeOption({ ...treeOption, fold: !treeOption.fold })
+                        }}
+                        >
+                            {treeOption.fold ? '展开' : '折叠'}
+                        </a>
+                    ),
+                },
+                {
+                    key: '环形',
+                    label: (
+                        <a onClick={() => { setTreeOption({ ...treeOption, layout: treeOption.layout === 'orthogonal' ? 'radial' : 'orthogonal' }) }}>
+                            {treeOption.layout === 'orthogonal' ? '环形' : '正交'}
+                        </a>
+                    ),
+                }
+            ]}
+        />
+    )
     return (
         <>
             <ReactECharts
+                showLoading={loading}
                 option={option}
                 style={{ height: '90vh', width: '100%' }}
                 onChartReady={handleChartReady}
@@ -308,6 +342,15 @@ const Graph: React.FC = () => {
                     icon={<SyncOutlined />}
                 />
             </Tooltip>
+            <Dropdown overlay={menu} placement="top">
+                <Button
+                    className="settingsBtn"
+                    shape="circle"
+                    size="large"
+                    icon={<SettingOutlined />}
+                />
+            </Dropdown>
+
         </>
     )
 }

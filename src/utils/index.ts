@@ -32,7 +32,7 @@ export const point2GraphNode = (data) => {
     return res
 }
 
-export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
+export const getTreeSeries = (data: TreeNode[], { fold, layout, edgeShape }): TreemapSeriesOption[] => [
     {
         type: 'tree',
         data,
@@ -40,14 +40,17 @@ export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
         left: '10%',
         bottom: '10%',
         right: '20%',
-        symbolSize: 14,
-        initialTreeDepth: 2,
+        symbolSize: 10,
+        edgeShape,
+        layout,
+        symbol: 'emptyCircle',
+        initialTreeDepth: fold ? 2 : 100,
         roam: true,
         label: {
             position: 'left',
             verticalAlign: 'middle',
             align: 'right',
-            fontSize: 15,
+            fontSize: 13,
         },
         leaves: {
             label: {
