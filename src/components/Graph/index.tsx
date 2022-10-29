@@ -291,7 +291,15 @@ const Graph: React.FC = () => {
                     key: '环形',
                     label: (
                         <a onClick={() => { setTreeOption({ ...treeOption, layout: treeOption.layout === 'orthogonal' ? 'radial' : 'orthogonal' }) }}>
-                            {treeOption.layout === 'orthogonal' ? '环形' : '正交'}
+                            {treeOption.layout === 'orthogonal' ? '放射' : '正交'}
+                        </a>
+                    ),
+                },
+                {
+                    key: '正交',
+                    label: (
+                        <a onClick={() => { setTreeOption({ ...treeOption, edgeShape: treeOption.edgeShape === 'polyline' ? 'curve' : 'polyline' }) }}>
+                            {treeOption.edgeShape === 'curve' ? '直线' : '曲线'}
                         </a>
                     ),
                 }
@@ -302,6 +310,7 @@ const Graph: React.FC = () => {
         <>
             <div id="charts">
                 <ReactECharts
+                    notMerge={true}
                     showLoading={loading}
                     option={option}
                     style={{ height: treeOption.fold || treeType === 'treemap' ? '90vh' : '3000px', width: '100%' }}
