@@ -300,12 +300,14 @@ const Graph: React.FC = () => {
     )
     return (
         <>
-            <ReactECharts
-                showLoading={loading}
-                option={option}
-                style={{ height: '90vh', width: '100%' }}
-                onChartReady={handleChartReady}
-            />
+            <div id="charts">
+                <ReactECharts
+                    showLoading={loading}
+                    option={option}
+                    style={{ height: treeOption.fold || treeType === 'treemap' ? '90vh' : '3000px', width: '100%' }}
+                    onChartReady={handleChartReady}
+                />
+            </div>
             <Modal
                 title={'添加'}
                 open={isModalOpen}
@@ -342,14 +344,15 @@ const Graph: React.FC = () => {
                     icon={<SyncOutlined />}
                 />
             </Tooltip>
-            <Dropdown overlay={menu} placement="top">
+            {treeType === 'tree' && <Dropdown overlay={menu} placement="top">
                 <Button
                     className="settingsBtn"
                     shape="circle"
                     size="large"
                     icon={<SettingOutlined />}
                 />
-            </Dropdown>
+            </Dropdown>}
+
 
         </>
     )
