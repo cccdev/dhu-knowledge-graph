@@ -286,11 +286,31 @@ const Detail: React.FC = (props) => {
                         >
                             全屏
                         </Button>
-                        <embed
-                            ref={fileRef}
-                            src={data?.addressId}
-                            style={{ marginTop: '20px' }}
-                        />
+                        {
+                            ['mp4', 'wav'].includes(data.type)
+                                ? <video
+                                    controls
+                                    ref={fileRef}
+                                    src={data?.addressId}
+                                    style={{ marginTop: '20px' }}
+                                    allowfullscreen
+                                />
+                                : (
+                                    data.type === 'pdf'
+                                        ? <embed
+                                            ref={fileRef}
+                                            src={data?.addressId}
+                                            style={{ marginTop: '20px' }}
+                                        />
+                                        : <img
+                                            ref={fileRef}
+                                            src={data?.addressId}
+                                            style={{ marginTop: '20px' }}
+                                            allowfullscreen
+                                        />
+                                )
+                        }
+
                     </div>
                 ) : (
                     <div className="no-detail">
