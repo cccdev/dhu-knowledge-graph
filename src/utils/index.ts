@@ -39,7 +39,7 @@ export const getTreeSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
         top: '10%',
         left: '10%',
         bottom: '10%',
-        right: '10%',
+        right: '20%',
         symbolSize: 14,
         initialTreeDepth: 2,
         roam: true,
@@ -71,8 +71,9 @@ export const getTreeMapSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
         type: 'treemap',
         data: data[0]?.children,
         drillDownIcon: '▶',
-        leafDepth: 4,
+        leafDepth: 3,
         squareRatio: 1,
+        visibleMin: 300,
         label: {
             show: true,
             formatter: '{b}',
@@ -82,12 +83,13 @@ export const getTreeMapSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
             height: 30,
         },
         itemStyle: {
-            borderColor: '#555',
+            borderColor: '#444',
+            borderWidth: 1,
         },
         levels: [
             {
                 itemStyle: {
-                    borderColor: '#777',
+                    borderColor: '#666',
                     borderWidth: 0,
                     gapWidth: 1,
                 },
@@ -97,13 +99,13 @@ export const getTreeMapSeries = (data: TreeNode[]): TreemapSeriesOption[] => [
             },
             {
                 itemStyle: {
-                    borderColor: '#555',
+                    // borderColor: '#555',
                     borderWidth: 5,
                     gapWidth: 1,
                 },
                 emphasis: {
                     itemStyle: {
-                        borderColor: '#aaa',
+                        // borderColor: '#aaa',
                     },
                 },
             },
