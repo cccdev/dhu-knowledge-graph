@@ -106,7 +106,7 @@ const Graph: React.FC = () => {
             if (res.every(e => e.code === 0)) {
                 message.success('添加成功')
             } else {
-                message.success('添加失败')
+                message.error('添加失败')
             }
             setInputValue('')
             setLoading(true)

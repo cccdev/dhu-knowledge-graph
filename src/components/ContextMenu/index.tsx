@@ -1,3 +1,5 @@
+import { userDataAtom } from '@/App'
+import { message } from 'antd'
 import { useAtom } from 'jotai'
 import React from 'react'
 import { contextMenuStyleAtom } from '../Graph'
@@ -11,12 +13,16 @@ export interface ContextMenuProps {
 
 const ContextMenu: React.FC<ContextMenuProps> = (props) => {
     const { showModal, showDeleteModal, showDetail } = props
+    const [userData] = useAtom(userDataAtom)
     const [style] = useAtom(contextMenuStyleAtom)
+    const needAdmin = () => {
+        message.warning('权限不足')
+    }
     return (
         <div style={style} id="context-menu">
             <ul>
-                <li onClick={showModal}>增加节点</li>
-                <li onClick={showDeleteModal}>删除节点</li>
+                <li onClick={userData.admin ? showModal : needAdmin}>增加节点</li>
+                <li onClick={userData.admin ? showDeleteModal : needAdmin}>删除节点</li>
                 <li onClick={showDetail}>查看详情</li>
             </ul>
         </div>
