@@ -38,7 +38,7 @@ export const getTreeSeries = (data: TreeNode[], { fold, layout, edgeShape }: myT
         bottom: '0',
         right: '20%',
         zoom: 1,
-        center: ['35%', '50%'],
+        center: layout === 'radial' ? ['0', '0'] : ['35%', '50%'],
         symbolSize: 10,
         edgeShape,
         layout,

@@ -9,7 +9,7 @@ import { request } from '@/utils/request'
 import { SettingOutlined, SyncOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Input, Menu, message, Modal, Tooltip } from 'antd'
 import { TreeSeriesOption } from 'echarts'
-import ReactECharts from 'echarts-for-react'
+import ReactECharts, { EChartsInstance } from 'echarts-for-react'
 import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
@@ -42,6 +42,7 @@ const Graph: React.FC = () => {
         beforePointId: '0',
     })
     const [inputValue, setInputValue] = useState('')
+    const [chartInstance, setChartInstance] = useState<EChartsInstance>(null);
     const [treeType, setTreeType] = useAtom(treeTypeAtom)
     const [userData, setUserdata] = useAtom(userDataAtom)
     const [treeOption, setTreeOption] = useState<myTreeSeriesOption>({
@@ -221,6 +222,7 @@ const Graph: React.FC = () => {
         darkMode: dark,
     }
     const handleChartReady = (chart: any) => {
+        setChartInstance(chart);
         chart.on('contextmenu', (params: any) => {
             if (params.name === undefined) return
             params.event.event.stopPropagation() // 阻止冒泡
@@ -283,6 +285,7 @@ const Graph: React.FC = () => {
                     key: '展开',
                     label: (
                         <a onClick={() => {
+                            chartInstance.clear();
                             setTreeOption({ ...treeOption, fold: !treeOption.fold })
                         }}
                         >
@@ -293,7 +296,17 @@ const Graph: React.FC = () => {
                 {
                     key: '环形',
                     label: (
-                        <a onClick={() => { setTreeOption({ ...treeOption, layout: treeOption.layout === 'orthogonal' ? 'radial' : 'orthogonal' }) }}>
+                        <a onClick={() => {
+                            if (treeOption.edgeShape === 'polyline' && treeOption.layout === 'orthogonal') {
+                                message.warn('放射状只能使用曲线')
+                                return;
+                            }
+                            chartInstance.clear();
+                            setTreeOption({
+                                ...treeOption,
+                                layout: treeOption.layout === 'orthogonal' ? 'radial' : 'orthogonal'
+                            })
+                        }}>
                             {treeOption.layout === 'orthogonal' ? '放射' : '正交'}
                         </a>
                     ),
@@ -301,7 +314,17 @@ const Graph: React.FC = () => {
                 {
                     key: '正交',
                     label: (
-                        <a onClick={() => { setTreeOption({ ...treeOption, edgeShape: treeOption.edgeShape === 'polyline' ? 'curve' : 'polyline' }) }}>
+                        <a onClick={() => {
+                            if (treeOption.edgeShape === 'curve' && treeOption.layout === 'radial') {
+                                message.warn('放射状只能使用曲线')
+                                return;
+                            }
+                            chartInstance.clear();
+                            setTreeOption({
+                                ...treeOption,
+                                edgeShape: treeOption.edgeShape === 'polyline' ? 'curve' : 'polyline'
+                            })
+                        }}>
                             {treeOption.edgeShape === 'curve' ? '直线' : '曲线'}
                         </a>
                     ),
@@ -316,7 +339,7 @@ const Graph: React.FC = () => {
                     notMerge={true}
                     showLoading={loading}
                     option={option}
-                    style={{ height: treeOption.fold || treeType === 'treemap' ? '90vh' : '3000px', width: '100%' }}
+                    style={{ height: (treeOption.fold || treeType === 'treemap' || treeOption.layout === 'radial') ? '90vh' : '3000px', width: '100%' }}
                     onChartReady={handleChartReady}
                 />
             </div>
