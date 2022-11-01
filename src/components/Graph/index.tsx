@@ -3,11 +3,12 @@
  * @description 知识图谱主页
  */
 import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
-import { TreeNode } from '@/types'
+import { GraphPoint, myTreeSeriesOption, TreeNode } from '@/types'
 import { getTreeMapSeries, getTreeSeries, point2TreeNode } from '@/utils'
 import { request } from '@/utils/request'
 import { SettingOutlined, SyncOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Input, Menu, message, Modal, Tooltip } from 'antd'
+import { TreeSeriesOption } from 'echarts'
 import ReactECharts from 'echarts-for-react'
 import { TreemapChart, TreemapSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
@@ -22,7 +23,7 @@ import './index.less'
 echarts.use([TooltipComponent, TreemapChart, CanvasRenderer])
 
 type EChartsOption = echarts.ComposeOption<
-    TooltipComponentOption | TreemapSeriesOption
+    TooltipComponentOption | TreemapSeriesOption | TreeSeriesOption
 >
 
 export class GraphProps { }
@@ -43,7 +44,7 @@ const Graph: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
     const [treeType, setTreeType] = useAtom(treeTypeAtom)
     const [userData, setUserdata] = useAtom(userDataAtom)
-    const [treeOption, setTreeOption] = useState({
+    const [treeOption, setTreeOption] = useState<myTreeSeriesOption>({
         fold: true,
         layout: 'orthogonal', // radial
         edgeShape: 'curve', // polyline
@@ -65,7 +66,7 @@ const Graph: React.FC = () => {
     }
     // 格式化数据，适配echarts
     const initData = () => {
-        request<TreeNode>({
+        request<GraphPoint>({
             url: '/home/getAllChildren',
             params: { pointId: 0 },
         }).then((res) => {
@@ -73,7 +74,6 @@ const Graph: React.FC = () => {
                 if (res.data.point) {
                     res.data.point.pointName = '知识图谱'
                 }
-                setLoading(false);
                 setData([point2TreeNode(res.data, treeType)])
             } else {
                 message.error(res.msg)
@@ -81,6 +81,10 @@ const Graph: React.FC = () => {
                     logOut()
                 }
             }
+        }).catch(() => {
+            message.warn('请稍等，系统更新维护中...')
+        }).finally(() => {
+            setLoading(false);
         })
     }
 
@@ -209,7 +213,6 @@ const Graph: React.FC = () => {
             show: true,
             trigger: 'item',
             triggerOn: 'mousemove',
-            // formatter: (params, ticket, callback) => params.data.path,
             formatter: '{b}',
             extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         },

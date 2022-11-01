@@ -1,38 +1,35 @@
-import { GraphPoint, TreeNode } from '@/types'
+import { GraphPoint, TreeNode, SearchGraphNode, myTreeSeriesOption } from '@/types'
+import { TreeSeriesOption } from 'echarts'
 import { TreemapSeriesOption } from 'echarts/charts'
 
 export const point2TreeNode = (
     data: GraphPoint,
     type: string
-): TreeNode | undefined => {
+): TreeNode => {
     const obj = {} as TreeNode
-    if (!data) return
     obj.name = data.point.pointName
     obj.value = data.count
-    obj.children = data.children
+    obj.children = [];
     obj.point = data.point
 
-    if (obj.children) {
-        for (let i = 0; i < obj.children.length; i++) {
-            const e = obj.children[i]
-            e.point ? (e.point.beforePointId = obj.point?.pointId) : e
-            e.path = obj.path + '/' + e.point.pointName
-            obj.children[i] = point2TreeNode(e, type)
-        }
+    for (let i = 0; i < data.children.length; i++) {
+        const e = data.children[i];
+        e.path = obj.path + '/' + e.point.pointName
+        obj.children.push(point2TreeNode(e, type));
     }
 
     return obj
 }
 
-export const point2GraphNode = (data) => {
-    const res = []
+export const point2GraphNode = (data: GraphPoint[]) => {
+    const res: SearchGraphNode[] = [];
     data.forEach((e) => {
         res.push({ id: e.pointId, name: e.pointName })
     })
     return res
 }
 
-export const getTreeSeries = (data: TreeNode[], { fold, layout, edgeShape }): TreemapSeriesOption[] => [
+export const getTreeSeries = (data: TreeNode[], { fold, layout, edgeShape }: myTreeSeriesOption): TreeSeriesOption[] => [
     {
         type: 'tree',
         data,

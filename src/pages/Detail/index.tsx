@@ -48,7 +48,9 @@ const Detail: React.FC = (props) => {
     const [params] = useSearchParams()
     const [pointId] = useState(params.getAll('id')[0])
     const [data, setData] = useState<PointDetail | null>(null)
-    const fileRef = useRef<HTMLEmbedElement | null>(null)
+    const videoRef = useRef<HTMLVideoElement | null>(null)
+    const embedRef = useRef<HTMLEmbedElement | null>(null)
+    const imgRef = useRef<HTMLImageElement | null>(null)
     const initData = () => {
         request<PointDetail | null>({
             url: '/home/detail',
@@ -275,6 +277,7 @@ const Detail: React.FC = (props) => {
                             className="file-btn"
                             onClick={() => {
                                 try {
+                                    const fileRef = imgRef ?? embedRef ?? videoRef;
                                     if (fileRef.current) {
                                         fileRef.current.requestFullscreen()
                                     }
@@ -290,23 +293,21 @@ const Detail: React.FC = (props) => {
                             ['mp4', 'wav'].includes(data.type)
                                 ? <video
                                     controls
-                                    ref={fileRef}
+                                    ref={videoRef}
                                     src={data?.addressId}
                                     style={{ marginTop: '20px' }}
-                                    allowfullscreen
                                 />
                                 : (
                                     data.type === 'pdf'
                                         ? <embed
-                                            ref={fileRef}
+                                            ref={embedRef}
                                             src={data?.addressId}
                                             style={{ marginTop: '20px' }}
                                         />
                                         : <img
-                                            ref={fileRef}
+                                            ref={imgRef}
                                             src={data?.addressId}
                                             style={{ marginTop: '20px' }}
-                                            allowfullscreen
                                         />
                                 )
                         }

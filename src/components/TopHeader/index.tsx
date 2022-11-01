@@ -10,7 +10,7 @@ import {
     QuestionCircleOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Dropdown, Input, Menu, MenuProps, Modal, Tag } from 'antd'
+import { Avatar, Dropdown, Input, Menu, MenuProps, Modal, Tag, Tooltip } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import { useAtom } from 'jotai'
 import React, { useRef } from 'react'
@@ -163,6 +163,14 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
                             ? '欢迎回来，' + userData.userName
                             : '请先登录'}
                     </span>
+                    {
+                        userData?.isLoggedIn &&
+                        <Tooltip title={"当前身份：" + (userData.admin ? '管理员' : '用户')}>
+                            <Tag color={userData.admin ? 'red' : 'green'}>
+                                {userData.admin ? '管理员' : '用户'}
+                            </Tag>
+                        </Tooltip>
+                    }
                     <Dropdown overlay={controlMenu}>
                         <Avatar
                             size="large"

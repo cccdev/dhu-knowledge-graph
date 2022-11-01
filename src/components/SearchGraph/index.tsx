@@ -2,25 +2,20 @@
  * @author 陆劲涛
  * @description 知识图谱主页
  */
-import { darkModeAtom, treeTypeAtom, userDataAtom } from '@/App'
-import { TreeNode } from '@/types'
+import { darkModeAtom } from '@/App'
+import { GraphPoint, SearchGraphNode } from '@/types'
 import {
-    getTreeMapSeries,
-    getTreeSeries,
     point2GraphNode,
-    point2TreeNode,
 } from '@/utils'
 import { request } from '@/utils/request'
-import { SyncOutlined } from '@ant-design/icons'
-import { Button, Input, message, Modal, Tooltip } from 'antd'
-import ReactECharts from 'echarts-for-react'
+import { Input, message, Modal } from 'antd'
+import ReactECharts, { EChartsInstance } from 'echarts-for-react'
 import { GraphChart, GraphSeriesOption } from 'echarts/charts'
 import { TooltipComponent, TooltipComponentOption } from 'echarts/components'
 import * as echarts from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import ContextMenu from '../ContextMenu'
 import { contextMenuStyleAtom } from '../Graph'
 import './index.less'
@@ -31,10 +26,11 @@ type EChartsOption = echarts.ComposeOption<
     TooltipComponentOption | GraphSeriesOption
 >
 
-export class GraphProps {}
-const Graph: React.FC = (props) => {
-    const [data, setData] = useState<TreeNode[]>([])
-    const navigate = useNavigate()
+type SearchGraphProps = {
+    keyword: string
+}
+const Graph: React.FC<SearchGraphProps> = (props) => {
+    const [data, setData] = useState<SearchGraphNode[]>([])
     const [modalTitle, setModalTitle] = useState('首页')
     const [tempPoint, setTempPoint] = useState({
         pointName: '',
@@ -42,80 +38,25 @@ const Graph: React.FC = (props) => {
     })
     const { keyword } = props
     const [inputValue, setInputValue] = useState('')
-    const [treeType, setTreeType] = useAtom(treeTypeAtom)
-    const [userData, setUserdata] = useAtom(userDataAtom)
     const [dark] = useAtom(darkModeAtom)
-    const logOut = () => {
-        setUserdata({
-            idLoggedIn: false,
-            mobile: '',
-        })
-        localStorage.setItem(
-            'userData',
-            JSON.stringify({
-                idLoggedIn: false,
-                mobile: '',
-            })
-        )
-        navigate('/login')
-    }
-    // 菜单栏style
     const [contextMenuStyle, setContextMenuStyle] =
         useAtom(contextMenuStyleAtom)
 
     // 格式化数据，适配echarts
     const initData = () => {
-        request<TreeNode>({
+        request<GraphPoint[]>({
             url: '/search/point',
             params: { pointName: keyword },
         }).then((res) => {
             if (res.code === 0) {
-                // console.log(res)
                 setData(point2GraphNode(res.data))
             } else {
                 message.error(res.msg)
-                // if (res.code === 500502) {
-                //   logOut()
-                // }
             }
         })
     }
 
     // echarts配置
-    function getLevelOption() {
-        return [
-            {
-                itemStyle: {
-                    borderColor: '#777',
-                    borderWidth: 0,
-                    gapWidth: 1,
-                },
-                upperLabel: {
-                    show: false,
-                },
-            },
-            {
-                itemStyle: {
-                    borderColor: '#555',
-                    borderWidth: 5,
-                    gapWidth: 1,
-                },
-                emphasis: {
-                    itemStyle: {
-                        borderColor: '#aaa',
-                    },
-                },
-            },
-            {
-                colorSaturation: [0.35, 0.5],
-                itemStyle: {
-                    borderWidth: 5,
-                    gapWidth: 1,
-                    borderColorSaturation: 0.6,
-                },
-            },
-        ]
-    }
     const option: EChartsOption = {
         title: {
             text: keyword + ' 的搜索结果',
@@ -158,9 +99,8 @@ const Graph: React.FC = (props) => {
         },
         darkMode: dark,
     }
-    const handleChartReady = (chart: any) => {
+    const handleChartReady = (chart: EChartsInstance) => {
         chart.on('contextmenu', (params: any) => {
-            console.log(params)
             if (params.name === undefined) return
             params.event.event.stopPropagation() // 阻止冒泡
             params.event.event.preventDefault() // 阻止默认右键菜单
@@ -181,9 +121,9 @@ const Graph: React.FC = (props) => {
     const showDetail = () => {
         window.open(
             '/detail?name=' +
-                tempPoint.pointName +
-                '&id=' +
-                tempPoint.beforePointId
+            tempPoint.pointName +
+            '&id=' +
+            tempPoint.beforePointId
         )
     }
 
@@ -315,5 +255,4 @@ const Graph: React.FC = (props) => {
     )
 }
 
-Graph.defaultProps = new GraphProps()
 export default Graph

@@ -16,7 +16,7 @@ const ContextMenu: React.FC<ContextMenuProps> = (props) => {
     const [userData] = useAtom(userDataAtom)
     const [style] = useAtom(contextMenuStyleAtom)
     const needAdmin = () => {
-        message.warning('权限不足')
+        message.warning('权限不足，若已申请权限，请重新登陆')
     }
     return (
         <div style={style} id="context-menu">

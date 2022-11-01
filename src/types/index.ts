@@ -13,6 +13,13 @@ export interface GraphPoint {
     pointId: string
     pointName: string
     count: number
+    value: number
+    point: {
+        pointName: string,
+        pointId: string
+    }
+    children: GraphPoint[]
+    path?: string
 }
 
 /**
@@ -22,7 +29,7 @@ export interface PointDetail {
     addressId: string
     pointId: string
     pointName: string
-    type: 'jpg' | 'png' | 'gif' | 'jpeg' | 'webp'
+    type: 'jpg' | 'png' | 'gif' | 'jpeg' | 'webp' | 'pdf' | 'mp4' | 'wav'
     fileName: string
     content: string
     uploader: string
@@ -36,9 +43,30 @@ export interface PointDetail {
  */
 export type TreeNode = {
     name: string
-    children?: TreeNode[]
+    children: TreeNode[]
     pointId?: string
-    value?: string
-    point?: GraphPoint
+    value?: number
+    point: {
+        pointName: string,
+        pointId: string
+    }
     path?: string
 }
+
+/**
+ * ECharts搜索节点
+ */
+export type SearchGraphNode = {
+    id: string;
+    name: string
+}
+
+/**
+ * ECharts搜索节点
+ */
+export type myTreeSeriesOption = {
+    fold: boolean,
+    layout: 'orthogonal' | 'radial'
+    edgeShape: 'polyline' | 'curve'
+}
+
