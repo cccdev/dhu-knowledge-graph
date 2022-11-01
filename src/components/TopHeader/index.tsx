@@ -10,7 +10,7 @@ import {
     QuestionCircleOutlined,
     UserOutlined,
 } from '@ant-design/icons'
-import { Avatar, Dropdown, Input, Menu, MenuProps, Modal, Tag, Tooltip } from 'antd'
+import { Avatar, Dropdown, Input, InputRef, Menu, MenuProps, Modal, Tag, Tooltip } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import { useAtom } from 'jotai'
 import React, { useRef } from 'react'
@@ -127,10 +127,11 @@ const TopHeader: React.FC<TopHeaderProps> = (props) => {
         })
     }
 
-    const inputRef = useRef()
+    const inputRef = useRef<InputRef>(null)
     const toSearch = () => {
-        const input = inputRef.current.input
-        window.open('/search?keyword=' + input.value)
+        const input = inputRef.current?.input
+        console.log(inputRef.current)
+        window.open('/search?keyword=' + input?.value)
     }
     return (
         <Header className="top-header">
